@@ -1,0 +1,88 @@
+/* Neo theme: soft green-yellow tones inspired by the pale finish of newer MacBook colors. */
+.neo {
+    --bg: #f8f9ef;
+    --fg: #233026;
+
+    --sidebar-bg: #eef2d8;
+    --sidebar-fg: #283528;
+    --sidebar-non-existant: #8b957f;
+    --sidebar-active: #3f7a45;
+    --sidebar-spacer: #dfe6c7;
+
+    --scrollbar: #9aa67f;
+
+    --icons: #6f7a60;
+    --icons-hover: #243424;
+
+    --links: #2f7466;
+
+    --inline-code-color: #6f5524;
+
+    --theme-popup-bg: #f5f7e8;
+    --theme-popup-border: #cad5aa;
+    --theme-hover: #e7eccb;
+
+    --quote-bg: #eef4dd;
+    --quote-border: #d5e3ad;
+
+    --warning-border: #d7982d;
+
+    --table-border-color: #e2e8ce;
+    --table-header-bg: #dce8bb;
+    --table-alternate-bg: #f1f4e3;
+
+    --searchbar-border-color: #b7c498;
+    --searchbar-bg: #fbfcf3;
+    --searchbar-fg: #1f2c22;
+    --searchbar-shadow-color: #c3d08d;
+    --searchresults-header-fg: #5c6650;
+    --searchresults-border-color: #c5d1a4;
+    --searchresults-li-bg: #edf4df;
+    --search-mark-bg: #dce889;
+
+    --color-scheme: light;
+
+    --copy-button-filter: invert(47%) sepia(10%) saturate(629%) hue-rotate(42deg) brightness(92%) contrast(88%);
+    --copy-button-filter-hover: invert(40%) sepia(63%) saturate(486%) hue-rotate(76deg) brightness(84%) contrast(89%);
+
+    --footnote-highlight: #d9e58b;
+
+    --overlay-bg: rgba(202, 213, 170, 0.34);
+
+    --blockquote-note-color: #2f6f9f;
+    --blockquote-tip-color: #3f7a45;
+    --blockquote-important-color: #7a5aa6;
+    --blockquote-warning-color: #8a6200;
+    --blockquote-caution-color: #a13a38;
+
+    --sidebar-header-border-color: #a9bb75;
+}
+
+.neo body {
+    background:
+        radial-gradient(circle at 0% 0%, rgba(218, 233, 143, 0.22), transparent 28rem),
+        linear-gradient(180deg, #fbfcf4 0%, var(--bg) 16rem);
+}
+
+.neo #mdbook-menu-bar {
+    background-color: rgba(248, 249, 239, 0.94);
+    backdrop-filter: blur(16px);
+}
+
+.neo .content main {
+    color: var(--fg);
+}
+
+.neo :not(pre) > .hljs {
+    background-color: #eef3d8;
+}
+
+.neo pre,
+.neo .hljs {
+    background-color: #f1f5e3;
+}
+
+.neo .theme-selected {
+    color: #213222;
+    background-color: #dfe9ba;
+}
