@@ -10,6 +10,8 @@
 
 ## 本地预览
 
+在线阅读地址（部署完成后可访问）：https://xiaofengoop.github.io/rust-for-csharp-programmers-zh-cn/
+
 ```powershell
 Set-Location "zh-cn/csharp-book"
 mdbook serve --open
@@ -21,6 +23,8 @@ mdbook serve --open
 Set-Location "zh-cn/csharp-book"
 mdbook build
 ```
+
+仓库推送到 `main` 后会通过 GitHub Actions 自动构建并部署到 GitHub Pages。
 
 ## 当前进度
 
