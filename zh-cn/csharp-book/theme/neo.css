@@ -80,9 +80,66 @@
 .neo pre,
 .neo .hljs {
     background-color: #f1f5e3;
+    color: #243026;
 }
 
 .neo .theme-selected {
     color: #213222;
     background-color: #dfe9ba;
+}
+
+.neo .hljs-comment,
+.neo .hljs-quote {
+    color: #68765f;
+}
+
+.neo .hljs-keyword,
+.neo .hljs-selector-tag {
+    color: #315f3a;
+    font-weight: 600;
+}
+
+.neo .hljs-string,
+.neo .hljs-symbol,
+.neo .hljs-bullet {
+    color: #4f6f1f;
+}
+
+.neo .hljs-number,
+.neo .hljs-literal,
+.neo .hljs-built_in,
+.neo .hljs-builtin-name,
+.neo .hljs-type,
+.neo .hljs-params,
+.neo .hljs-meta,
+.neo .hljs-attribute,
+.neo .hljs-attr {
+    color: #8a5b16;
+}
+
+.neo .hljs-variable,
+.neo .hljs-template-variable,
+.neo .hljs-tag,
+.neo .hljs-name,
+.neo .hljs-regexp,
+.neo .hljs-link,
+.neo .hljs-selector-id,
+.neo .hljs-selector-class {
+    color: #9b4a25;
+}
+
+.neo .hljs-title,
+.neo .hljs-section {
+    color: #2e6f73;
+    font-weight: 600;
+}
+
+.neo .hljs-addition {
+    color: #2f6f3c;
+    background-color: #e3efd3;
+}
+
+.neo .hljs-deletion {
+    color: #91413c;
+    background-color: #f3e2dc;
 }
