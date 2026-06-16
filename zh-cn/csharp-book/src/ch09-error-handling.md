@@ -351,4 +351,4 @@ fn load_config(path: &str) -> Result<Config> {
 - 不同于 C# 异常，错误类型会出现在每个函数签名里。
 
 </details>
-</details># 9. 错误处理
+</details>

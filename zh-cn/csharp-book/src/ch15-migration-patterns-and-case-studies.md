@@ -582,4 +582,6 @@ impl<D: Database> UserService for UserServiceImpl<D> {
 - `IDatabase _db` → 泛型 `D: Database`（静态分发，无需装箱）。
 
 </details>
-</details># 15. 迁移模式与案例研究
+</details>
+
+***
