@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy mdBook to GitHub Pages
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -21,37 +21,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-
-      - name: Cache cargo dependencies
-        uses: actions/cache@v5
+      - name: Install mdBook
+        uses: taiki-e/install-action@v2
         with:
-          path: |
-            ~/.cargo/bin
-            ~/.cargo/registry/index
-            ~/.cargo/registry/cache
-            ~/.cargo/git/db
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+          tool: mdbook@0.5.3,mdbook-mermaid@0.17.0
 
-      - name: Install mdbook and dependencies
-        run: |
-          which mdbook || cargo install mdbook
-          which mdbook-mermaid || cargo install mdbook-mermaid
+      - name: Build book
+        working-directory: zh-cn/csharp-book
+        run: mdbook build
 
-      - name: Build documentation
-        run: cargo xtask deploy
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./docs
+          path: zh-cn/csharp-book/book
 
   deploy:
     environment:
@@ -62,4 +47,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
