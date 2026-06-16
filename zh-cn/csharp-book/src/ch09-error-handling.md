@@ -1,16 +1,19 @@
-## Exceptions vs `Result<T, E>`
+# 9. 错误处理
 
-> **What you'll learn:** Why Rust replaces exceptions with `Result<T, E>` and `Option<T>`,
-> the `?` operator for concise error propagation, and how explicit error handling
-> eliminates hidden control flow that plagues C# `try`/`catch` code.
->
-> **Difficulty:** 🟡 Intermediate
->
-> **See also**: [Crate-Level Error Types](ch09-1-crate-level-error-types-and-result-alias.md) for production error patterns with `thiserror` and `anyhow`, and [Essential Crates](ch15-1-essential-crates-for-c-developers.md) for the error crate ecosystem.
+<a id="exceptions-vs-resultt-e"></a>
 
-### C# Exception-Based Error Handling
+## 异常与 `Result<T, E>`
+
+> **你将学到什么：** 为什么 Rust 用 `Result<T, E>` 和 `Option<T>` 取代异常，如何用 `?` 运算符简洁地传播错误，以及显式错误处理如何消除 C# `try`/`catch` 代码中常见的隐藏控制流。
+>
+> **难度：** 🟡 中级
+>
+> **另见：** [crate 级错误类型](ch09-1-crate-level-error-types-and-result-alias.md) 介绍使用 `thiserror` 和 `anyhow` 的生产级错误模式，[C# 开发者常用 crate](ch15-1-essential-crates-for-c-developers.md) 介绍错误处理 crate 生态。
+
+### C# 基于异常的错误处理
+
 ```csharp
-// C# - Exception-based error handling
+// C#：基于异常的错误处理
 public class UserService
 {
     public User GetUser(int userId)
@@ -44,13 +47,14 @@ public class UserService
         catch (Exception ex)
         {
             logger.Error(ex, "Unexpected error getting user email");
-            throw; // Re-throw
+            throw; // 重新抛出
         }
     }
 }
 ```
 
-### Rust Result-Based Error Handling
+### Rust 基于 Result 的错误处理
+
 ```rust
 use std::fmt;
 
@@ -82,7 +86,7 @@ pub struct User {
 }
 
 pub struct UserService {
-    users: Vec<User>,  // Simulated database
+    users: Vec<User>,  // 模拟数据库
 }
 
 impl UserService {
@@ -95,13 +99,13 @@ impl UserService {
             return Err(UserError::InvalidId(user_id));
         }
         
-        // Simulate database lookup
+        // 模拟数据库查询
         self.database_find_user(user_id)
             .ok_or(UserError::NotFound(user_id))
     }
     
     pub fn get_user_email(&self, user_id: i32) -> Result<String, UserError> {
-        let user = self.get_user(user_id)?; // ? operator propagates errors
+        let user = self.get_user(user_id)?; // ? 运算符会传播错误
         
         user.email
             .ok_or(UserError::NoEmail)
@@ -125,13 +129,13 @@ impl UserService {
 
 ```mermaid
 graph TD
-    subgraph "C# Exception Model"
-        CS_CALL["Method Call"]
-        CS_SUCCESS["Success Path"]
+    subgraph "C# 异常模型"
+        CS_CALL["方法调用"]
+        CS_SUCCESS["成功路径"]
         CS_EXCEPTION["throw Exception"]
-        CS_STACK["Stack unwinding<br/>(Runtime cost)"]
-        CS_CATCH["try/catch block"]
-        CS_HIDDEN["[ERROR] Hidden control flow<br/>[ERROR] Performance cost<br/>[ERROR] Easy to ignore"]
+        CS_STACK["Stack unwinding<br/>（运行时开销）"]
+        CS_CATCH["try/catch 块"]
+        CS_HIDDEN["[错误] 隐藏控制流<br/>[错误] 性能成本<br/>[错误] 容易忽略"]
         
         CS_CALL --> CS_SUCCESS
         CS_CALL --> CS_EXCEPTION
@@ -140,13 +144,13 @@ graph TD
         CS_EXCEPTION --> CS_HIDDEN
     end
     
-    subgraph "Rust Result Model"
-        RUST_CALL["Function Call"]
+    subgraph "Rust Result 模型"
+        RUST_CALL["函数调用"]
         RUST_OK["Ok(value)"]
         RUST_ERR["Err(error)"]
         RUST_MATCH["match result"]
-        RUST_QUESTION["? operator<br/>(early return)"]
-        RUST_EXPLICIT["[OK] Explicit error handling<br/>[OK] Zero runtime cost<br/>[OK] Cannot ignore errors"]
+        RUST_QUESTION["? 运算符<br/>（提前返回）"]
+        RUST_EXPLICIT["[OK] 显式错误处理<br/>[OK] 零运行时开销<br/>[OK] 错误不能被忽略"]
         
         RUST_CALL --> RUST_OK
         RUST_CALL --> RUST_ERR
@@ -165,23 +169,26 @@ graph TD
 
 ***
 
-### The ? Operator: Propagating Errors Concisely
+<a id="the--operator-propagating-errors-concisely"></a>
+
+### `?` 运算符：简洁地传播错误
+
 ```csharp
-// C# - Exception propagation (implicit)
+// C#：异常传播（隐式）
 public async Task<string> ProcessFileAsync(string path)
 {
-    var content = await File.ReadAllTextAsync(path);  // Throws on error
-    var processed = ProcessContent(content);          // Throws on error
+    var content = await File.ReadAllTextAsync(path);  // 出错时抛异常
+    var processed = ProcessContent(content);          // 出错时抛异常
     return processed;
 }
 ```
 
 ```rust
-// Rust - Error propagation with ?
+// Rust：使用 ? 传播错误
 fn process_file(path: &str) -> Result<String, ConfigError> {
-    let content = read_config(path)?;  // ? propagates error if Err
-    let processed = process_content(&content)?;  // ? propagates error if Err
-    Ok(processed)  // Wrap success value in Ok
+    let content = read_config(path)?;  // 如果是 Err，? 会传播错误
+    let processed = process_content(&content)?;  // 如果是 Err，? 会传播错误
+    Ok(processed)  // 将成功值包进 Ok
 }
 
 fn process_content(content: &str) -> Result<String, ConfigError> {
@@ -193,13 +200,14 @@ fn process_content(content: &str) -> Result<String, ConfigError> {
 }
 ```
 
-### `Option<T>` for Nullable Values
+### 用 `Option<T>` 表示可空值
+
 ```csharp
-// C# - Nullable reference types
+// C#：可空引用类型
 public string? FindUserName(int userId)
 {
     var user = database.FindUser(userId);
-    return user?.Name;  // Returns null if user not found
+    return user?.Name;  // 找不到用户时返回 null
 }
 
 public void ProcessUser(int userId)
@@ -217,9 +225,9 @@ public void ProcessUser(int userId)
 ```
 
 ```rust
-// Rust - Option<T> for optional values
+// Rust：用 Option<T> 表示可选值
 fn find_user_name(user_id: u32) -> Option<String> {
-    // Simulate database lookup
+    // 模拟数据库查询
     if user_id == 1 {
         Some("Alice".to_string())
     } else {
@@ -233,7 +241,7 @@ fn process_user(user_id: u32) {
         None => println!("User not found"),
     }
     
-    // Or use if let (pattern matching shorthand)
+    // 或使用 if let（模式匹配的简写）
     if let Some(name) = find_user_name(user_id) {
         println!("User: {}", name);
     } else {
@@ -242,7 +250,8 @@ fn process_user(user_id: u32) {
 }
 ```
 
-### Combining Option and Result
+### 组合 Option 和 Result
+
 ```rust
 fn safe_divide(a: f64, b: f64) -> Option<f64> {
     if b != 0.0 {
@@ -253,9 +262,9 @@ fn safe_divide(a: f64, b: f64) -> Option<f64> {
 }
 
 fn parse_and_divide(a_str: &str, b_str: &str) -> Result<Option<f64>, ParseFloatError> {
-    let a: f64 = a_str.parse()?;  // Return parse error if invalid
-    let b: f64 = b_str.parse()?;  // Return parse error if invalid
-    Ok(safe_divide(a, b))         // Return Ok(Some(result)) or Ok(None)
+    let a: f64 = a_str.parse()?;  // 无效时返回解析错误
+    let b: f64 = b_str.parse()?;  // 无效时返回解析错误
+    Ok(safe_divide(a, b))         // 返回 Ok(Some(result)) 或 Ok(None)
 }
 
 use std::num::ParseFloatError;
@@ -273,19 +282,19 @@ fn main() {
 
 
 <details>
-<summary><strong>🏋️ Exercise: Build a Crate-Level Error Type</strong> (click to expand)</summary>
+<summary><strong>🏋️ 练习：构建 crate 级错误类型</strong>（点击展开）</summary>
 
-**Challenge**: Create an `AppError` enum for a file processing application that can fail due to I/O errors, JSON parse errors, and validation errors. Implement `From` conversions for automatic `?` propagation.
+**挑战：** 为一个文件处理应用创建 `AppError` enum，它可能因为 I/O 错误、JSON 解析错误和验证错误而失败。实现 `From` 转换，以便自动使用 `?` 传播。
 
 ```rust
-// Starter code
+// 起始代码
 use std::io;
 
-// TODO: Define AppError with variants:
+// TODO: 定义 AppError，包含这些变体：
 //   Io(io::Error), Json(serde_json::Error), Validation(String)
-// TODO: Implement Display and Error traits
-// TODO: Implement From<io::Error> and From<serde_json::Error>
-// TODO: Define type alias: type Result<T> = std::result::Result<T, AppError>;
+// TODO: 实现 Display 和 Error trait
+// TODO: 实现 From<io::Error> 和 From<serde_json::Error>
+// TODO: 定义类型别名：type Result<T> = std::result::Result<T, AppError>;
 
 fn load_config(path: &str) -> Result<Config> {
     let content = std::fs::read_to_string(path)?;  // io::Error → AppError
@@ -298,7 +307,7 @@ fn load_config(path: &str) -> Result<Config> {
 ```
 
 <details>
-<summary>🔑 Solution</summary>
+<summary>🔑 参考答案</summary>
 
 ```rust
 use std::io;
@@ -334,13 +343,12 @@ fn load_config(path: &str) -> Result<Config> {
 }
 ```
 
-**Key takeaways**:
-- `thiserror` generates `Display` and `Error` impls from attributes
-- `#[from]` generates `From<T>` impls, enabling automatic `?` conversion
-- The `Result<T>` alias eliminates boilerplate throughout your crate
-- Unlike C# exceptions, the error type is visible in every function signature
+**关键要点：**
+
+- `thiserror` 会根据属性生成 `Display` 和 `Error` 实现。
+- `#[from]` 会生成 `From<T>` 实现，让 `?` 能自动转换错误。
+- `Result<T>` 别名能消除整个 crate 中的样板代码。
+- 不同于 C# 异常，错误类型会出现在每个函数签名里。
 
 </details>
-</details>
-
-
+</details># 9. 错误处理

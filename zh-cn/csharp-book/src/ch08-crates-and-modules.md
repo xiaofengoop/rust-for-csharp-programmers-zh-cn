@@ -1,15 +1,19 @@
-## Modules and Crates: Code Organization
+# 8. crate 与模块
 
-> **What you'll learn:** Rust's module system vs C# namespaces and assemblies, `pub`/`pub(crate)`/`pub(super)` visibility,
-> file-based module organization, and how crates map to .NET assemblies.
+## 代码组织
+
+> **你将学到什么：** Rust 的模块系统与 C# 命名空间、程序集之间的对比，`pub`/`pub(crate)`/`pub(super)` 可见性，基于文件的模块组织方式，以及 crate 如何对应 .NET assembly。
 >
-> **Difficulty:** 🟢 Beginner
+> **难度：** 🟢 初级
 
-Understanding Rust's module system is essential for organizing code and managing dependencies. For C# developers, this is analogous to understanding namespaces, assemblies, and NuGet packages.
+理解 Rust 的模块系统，是组织代码和管理依赖的基础。对 C# 开发者来说，这相当于理解命名空间、assembly 和 NuGet 包。
 
-### Rust Modules vs C# Namespaces
+<a id="rust-modules-vs-c-namespaces"></a>
 
-#### C# Namespace Organization
+### Rust 模块与 C# 命名空间
+
+#### C# 命名空间组织
+
 ```csharp
 // File: Models/User.cs
 namespace MyApp.Models
@@ -52,7 +56,8 @@ namespace MyApp
 }
 ```
 
-#### Rust Module Organization
+#### Rust 模块组织
+
 ```rust
 // File: src/models.rs
 pub struct User {
@@ -90,14 +95,14 @@ fn main() {
 }
 ```
 
-### Module Hierarchy and Visibility
+### 模块层级与可见性
 
 ```mermaid
 graph TD
-    Crate["crate (root)"] --> ModA["mod data"]
+    Crate["crate（根）"] --> ModA["mod data"]
     Crate --> ModB["mod api"]
     ModA --> SubA1["pub struct Repo"]
-    ModA --> SubA2["fn helper  (private)"]
+    ModA --> SubA2["fn helper（私有）"]
     ModB --> SubB1["pub fn handle()"]
     ModB --> SubB2["pub(crate) fn internal()"]
     ModB --> SubB3["pub(super) fn parent_only()"]
@@ -109,71 +114,74 @@ graph TD
     style SubB3 fill:#fff9c4,color:#000
 ```
 
-> 🟢 Green = public everywhere &nbsp;|&nbsp; 🟡 Yellow = restricted visibility &nbsp;|&nbsp; 🔴 Red = private
+> 🟢 绿色 = 到处公开 &nbsp;|&nbsp; 🟡 黄色 = 受限可见性 &nbsp;|&nbsp; 🔴 红色 = 私有
 
-#### C# Visibility Modifiers
+#### C# 可见性修饰符
+
 ```csharp
 namespace MyApp.Data
 {
-    // public - accessible from anywhere
+    // public：任何地方都能访问
     public class Repository
     {
-        // private - only within this class
+        // private：只能在这个类内部访问
         private string connectionString;
         
-        // internal - within this assembly
+        // internal：同一 assembly 内可访问
         internal void Connect() { }
         
-        // protected - this class and subclasses
+        // protected：当前类和子类可访问
         protected virtual void Initialize() { }
         
-        // public - accessible from anywhere
+        // public：任何地方都能访问
         public void Save(object data) { }
     }
 }
 ```
 
-#### Rust Visibility Rules
+#### Rust 可见性规则
+
 ```rust
-// Everything is private by default in Rust
+// Rust 中所有东西默认都是私有的
 mod data {
-    struct Repository {  // Private struct
-        connection_string: String,  // Private field
+    struct Repository {  // 私有结构体
+        connection_string: String,  // 私有字段
     }
     
     impl Repository {
-        fn new() -> Repository {  // Private function
+        fn new() -> Repository {  // 私有函数
             Repository {
                 connection_string: "localhost".to_string(),
             }
         }
         
-        pub fn connect(&self) {  // Public method
-            // Only accessible within this module and its children
+        pub fn connect(&self) {  // 公开方法
+            // 由于 Repository 本身私有，外部仍然不能直接调用它
         }
         
-        pub(crate) fn initialize(&self) {  // Crate-level public
-            // Accessible anywhere in this crate
+        pub(crate) fn initialize(&self) {  // crate 级公开
+            // 这个 crate 内的任何位置都能访问
         }
         
-        pub(super) fn internal_method(&self) {  // Parent module public
-            // Accessible in parent module
+        pub(super) fn internal_method(&self) {  // 对父模块公开
+            // 父模块中可以访问
         }
     }
     
-    // Public struct - accessible from outside the module
+    // 公开结构体：模块外部也能访问
     pub struct PublicRepository {
-        pub data: String,  // Public field
-        private_data: String,  // Private field (no pub)
+        pub data: String,  // 公开字段
+        private_data: String,  // 私有字段（没有 pub）
     }
 }
 
-pub use data::PublicRepository;  // Re-export for external use
+pub use data::PublicRepository;  // 重新导出，方便外部使用
 ```
 
-### Module File Organization
+### 模块文件组织
 
-#### C# Project Structure
+#### C# 项目结构
+
 ```text
 MyApp/
 ├── MyApp.csproj
@@ -188,18 +196,19 @@ MyApp/
 └── Program.cs
 ```
 
-#### Rust Module File Structure
+#### Rust 模块文件结构
+
 ```text
 my_app/
 ├── Cargo.toml
 └── src/
     ├── main.rs (or lib.rs)
     ├── models/
-    │   ├── mod.rs        // Module declaration
+    │   ├── mod.rs        // 模块声明
     │   ├── user.rs
     │   └── product.rs
     ├── services/
-    │   ├── mod.rs        // Module declaration
+    │   ├── mod.rs        // 模块声明
     │   ├── user_service.rs
     │   └── product_service.rs
     └── controllers/
@@ -207,38 +216,43 @@ my_app/
         └── api_controller.rs
 ```
 
-#### Module Declaration Patterns
+#### 模块声明模式
+
 ```rust
 // src/models/mod.rs
-pub mod user;      // Declares user.rs as a submodule
-pub mod product;   // Declares product.rs as a submodule
+pub mod user;      // 将 user.rs 声明为子模块
+pub mod product;   // 将 product.rs 声明为子模块
 
-// Re-export commonly used types
+// 重新导出常用类型
 pub use user::User;
 pub use product::Product;
 
 // src/main.rs
-mod models;     // Declares models/ as a module
-mod services;   // Declares services/ as a module
+mod models;     // 将 models/ 声明为模块
+mod services;   // 将 services/ 声明为模块
 
-// Import specific items
+// 导入特定条目
 use models::{User, Product};
 use services::UserService;
 
-// Or import the entire module
-use models::user::*;  // Import all public items from user module
+// 或导入整个模块
+use models::user::*;  // 导入 user 模块中的所有公开条目
 ```
 
 ***
 
-## Crates vs .NET Assemblies
+<a id="crates-vs-net-assemblies"></a>
 
-### Understanding Crates
-In Rust, a **crate** is the fundamental unit of compilation and code distribution, similar to how an **assembly** works in .NET.
+## crate 与 .NET Assembly
 
-#### C# Assembly Model
+### 理解 crate
+
+在 Rust 中，**crate** 是编译和代码分发的基本单元，类似于 .NET 中 **assembly** 的角色。
+
+#### C# Assembly 模型
+
 ```csharp
-// MyLibrary.dll - Compiled assembly
+// MyLibrary.dll：已编译的 assembly
 namespace MyLibrary
 {
     public class Calculator
@@ -247,7 +261,7 @@ namespace MyLibrary
     }
 }
 
-// MyApp.exe - Executable assembly that references MyLibrary.dll
+// MyApp.exe：引用 MyLibrary.dll 的可执行 assembly
 using MyLibrary;
 
 class Program
@@ -260,9 +274,10 @@ class Program
 }
 ```
 
-#### Rust Crate Model
+#### Rust crate 模型
+
 ```toml
-# Cargo.toml for library crate
+# library crate 的 Cargo.toml
 [package]
 name = "my_calculator"
 version = "0.1.0"
@@ -273,7 +288,7 @@ name = "my_calculator"
 ```
 
 ```rust
-// src/lib.rs - Library crate
+// src/lib.rs：Library crate
 pub struct Calculator;
 
 impl Calculator {
@@ -284,7 +299,7 @@ impl Calculator {
 ```
 
 ```toml
-# Cargo.toml for binary crate that uses the library
+# 使用该库的 binary crate 的 Cargo.toml
 [package]
 name = "my_app"
 version = "0.1.0"
@@ -295,7 +310,7 @@ my_calculator = { path = "../my_calculator" }
 ```
 
 ```rust
-// src/main.rs - Binary crate
+// src/main.rs：Binary crate
 use my_calculator::Calculator;
 
 fn main() {
@@ -304,19 +319,20 @@ fn main() {
 }
 ```
 
-### Crate Types Comparison
+### crate 类型对比
 
-| C# Concept | Rust Equivalent | Purpose |
+| C# 概念 | Rust 对应概念 | 用途 |
 |------------|----------------|---------|
-| Class Library (.dll) | Library crate | Reusable code |
-| Console App (.exe) | Binary crate | Executable program |
-| NuGet Package | Published crate | Distribution unit |
-| Assembly (.dll/.exe) | Compiled crate | Compilation unit |
-| Solution (.sln) | Workspace | Multi-project organization |
+| Class Library (.dll) | Library crate | 可复用代码 |
+| Console App (.exe) | Binary crate | 可执行程序 |
+| NuGet Package | Published crate | 分发单元 |
+| Assembly (.dll/.exe) | Compiled crate | 编译单元 |
+| Solution (.sln) | Workspace | 多项目组织 |
 
-### Workspace vs Solution
+### Workspace 与 Solution
 
-#### C# Solution Structure
+#### C# Solution 结构
+
 ```xml
 <!-- MySolution.sln structure -->
 <Solution>
@@ -327,9 +343,10 @@ fn main() {
 </Solution>
 ```
 
-#### Rust Workspace Structure
+#### Rust Workspace 结构
+
 ```toml
-# Cargo.toml at workspace root
+# 工作区根目录下的 Cargo.toml
 [workspace]
 members = [
     "web_api",
@@ -339,7 +356,7 @@ members = [
 ]
 
 [workspace.dependencies]
-serde = "1.0"           # Shared dependency versions
+serde = "1.0"           # 共享依赖版本
 tokio = "1.0"
 ```
 
@@ -352,18 +369,18 @@ edition = "2021"
 
 [dependencies]
 business = { path = "../business" }
-serde = { workspace = true }    # Use workspace version
+serde = { workspace = true }    # 使用 workspace 版本
 tokio = { workspace = true }
 ```
 
 ---
 
-## Exercises
+## 练习
 
 <details>
-<summary><strong>🏋️ Exercise: Design a Module Tree</strong> (click to expand)</summary>
+<summary><strong>🏋️ 练习：设计模块树</strong>（点击展开）</summary>
 
-Given this C# project layout, design the equivalent Rust module tree:
+给定下面这个 C# 项目布局，设计等价的 Rust 模块树：
 
 ```csharp
 // C#
@@ -373,15 +390,17 @@ namespace MyApp.Models { public class User { } }
 namespace MyApp.Models { public class Session { } }
 ```
 
-Requirements:
-1. `AuthService` and both models must be public
-2. `TokenStore` must be private to the `services` module
-3. Provide the file layout **and** the `mod` / `pub` declarations in `lib.rs`
+要求：
+
+1. `AuthService` 和两个模型都必须公开。
+2. `TokenStore` 必须只对 `services` 模块私有。
+3. 给出文件布局，以及 `lib.rs` 中的 `mod` / `pub` 声明。
 
 <details>
-<summary>🔑 Solution</summary>
+<summary>🔑 参考答案</summary>
 
-File layout:
+文件布局：
+
 ```
 src/
 ├── lib.rs
@@ -401,20 +420,20 @@ pub mod services;
 pub mod models;
 
 // src/services/mod.rs
-mod token_store;          // private — like C# internal
-pub mod auth_service;     // public
+mod token_store;          // 私有，类似 C# internal
+pub mod auth_service;     // 公开
 
 // src/services/auth_service.rs
-use super::token_store::TokenStore; // visible within the module
+use super::token_store::TokenStore; // 在同一模块树内可见
 
 pub struct AuthService;
 
 impl AuthService {
-    pub fn login(&self) { /* uses TokenStore internally */ }
+    pub fn login(&self) { /* internally uses TokenStore */ }
 }
 
 // src/services/token_store.rs
-pub(super) struct TokenStore; // visible to parent (services) only
+pub(super) struct TokenStore; // 只对父模块 services 可见
 
 // src/models/mod.rs
 pub mod user;
@@ -435,5 +454,3 @@ pub struct Session {
 </details>
 
 ***
-
-

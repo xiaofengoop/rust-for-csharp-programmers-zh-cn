@@ -1,5 +1,7 @@
 # 3. 内置类型与变量
 
+<a id="variables-and-mutability"></a>
+
 ## 变量与可变性
 
 > **你将学到什么：** Rust 的变量声明与可变性模型如何对应 C# 的 `var`/`const`，原始类型的映射，`String` 与 `&str` 之间非常关键的区别，类型推断，以及 Rust 处理类型转换的方式为何不同于 C#。
@@ -87,6 +89,8 @@ impl Counter {
 
 ## 数据类型对比
 
+<a id="primitive-types"></a>
+
 ### 原始类型
 
 | C# 类型 | Rust 类型 | 大小 | 范围 |
@@ -153,6 +157,8 @@ let mut list: Vec<i32> = Vec::new();       // 堆上 vector，动态大小
 ```
 
 ***
+
+<a id="string-types-string-vs-str"></a>
 
 ## 字符串类型：String 与 &str
 
@@ -232,6 +238,8 @@ let borrowed_view: &str = &owned;               // 从 owned 中借用出视图
 ```
 
 ***
+
+<a id="printing-and-string-formatting"></a>
 
 ## 打印与字符串格式化
 
@@ -343,6 +351,8 @@ println!("{}", p);    // (1.5, 2.7)  — 面向用户更友好
 | `Console.Error.WriteLine` | `eprintln!()` | 写入 stderr |
 
 ***
+
+<a id="type-casting-and-conversions"></a>
 
 ## 类型转换
 

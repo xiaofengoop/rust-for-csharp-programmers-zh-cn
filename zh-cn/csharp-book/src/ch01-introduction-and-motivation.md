@@ -13,6 +13,8 @@
 
 ---
 
+<a id="the-case-for-rust-for-c-developers"></a>
+
 ## 面向 C# 开发者的 Rust 价值
 
 > **你将学到什么：** 为什么 Rust 对 C# 开发者有意义：托管代码与原生代码之间的性能差距，Rust 如何在编译期消除空引用异常和隐藏控制流，以及 Rust 适合补充或替代 C# 的关键场景。
@@ -128,6 +130,8 @@ impl SafeOperations {
 ```
 
 ***
+
+<a id="common-c-pain-points-that-rust-addresses"></a>
 
 ## Rust 解决的常见 C# 痛点
 
@@ -459,6 +463,8 @@ impl HighFrequencyTrader {
 
 ***
 
+<a id="when-to-choose-rust-over-c"></a>
+
 ## 何时选择 Rust 而不是 C#
 
 ### 选择 Rust 的场景
@@ -519,6 +525,8 @@ impl HighFrequencyTrader {
 
 ***
 
+<a id="language-philosophy-comparison"></a>
+
 ## 语言哲学对比
 
 ### C# 的哲学
@@ -576,6 +584,8 @@ graph TD
 ```
 
 ***
+
+<a id="quick-reference-rust-vs-c"></a>
 
 ## 速查：Rust 与 C#
 

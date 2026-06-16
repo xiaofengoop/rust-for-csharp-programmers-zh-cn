@@ -1,6 +1,8 @@
 # 构造模式
 
-> **你将学到什么：** 如何在没有传统构造函数的情况下创建 Rust 结构体：`new()` 约定、`Default` trait、工厂方法，以及用于复杂初始化的 builder pattern。
+<a id="constructor-patterns"></a>
+
+> **你将学到什么：** 如何在没有传统构造函数的情况下创建 Rust 结构体：`new()` 约定、`Default` trait、工厂方法，以及用于复杂初始化的构建器模式。
 >
 > **难度：** 🟢 初级
 
@@ -78,7 +80,7 @@ impl Configuration {
 		}
 	}
     
-	// Builder pattern 方法
+	// 构建器模式方法
 	pub fn enable_logging(mut self) -> Configuration {
 		self.enable_logging = true;
 		self  // 返回 self 以便链式调用
@@ -103,7 +105,7 @@ fn main() {
 	let config2 = Configuration::with_database("localhost:5432".to_string(), 20);
 	let config3 = Configuration::for_production();
     
-	// Builder pattern
+	// 构建器模式
 	let config4 = Configuration::new()
 		.enable_logging()
 		.max_connections(50);
@@ -115,10 +117,10 @@ fn main() {
 }
 ```
 
-### Builder Pattern 实现
+### Builder Pattern（构建器模式）实现
 
 ```rust
-// 更复杂的 builder pattern
+// 更复杂的构建器模式
 #[derive(Debug)]
 pub struct DatabaseConfig {
 	host: String,

@@ -1,5 +1,7 @@
 # 真正的不可变性与 record 的错觉
 
+<a id="true-immutability-vs-record-illusions"></a>
+
 ## 真正的不可变性与 record 的错觉
 
 > **你将学到什么：** 为什么 C# 的 `record` 类型并不是真正不可变（可变字段、反射绕过），Rust 如何在编译期强制真正的不可变性，以及什么时候使用内部可变性模式。

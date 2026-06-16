@@ -1,5 +1,7 @@
 # 4. 控制流
 
+<a id="functions-vs-methods"></a>
+
 ## 函数与方法
 
 > **你将学到什么：** Rust 与 C# 中函数和方法的差异，表达式与语句之间的关键区别，`if`/`match`/`loop`/`while`/`for` 语法，以及 Rust 面向表达式的设计如何消除对三元运算符的需求。
@@ -58,6 +60,8 @@ fn main() {
 	println!("After increment: {}", x);
 }
 ```
+
+<a id="expression-vs-statement-important"></a>
 
 ### 表达式与语句（很重要！）
 
@@ -137,6 +141,8 @@ fn main() {
 
 ## 控制流基础
 
+<a id="conditional-statements"></a>
+
 ### 条件语句
 
 ```csharp
@@ -182,6 +188,8 @@ let message = if x > 10 {
 	"Small"
 };
 ```
+
+<a id="loops"></a>
 
 ### 循环
 

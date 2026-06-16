@@ -1,5 +1,7 @@
 # 生命周期深入解析
 
+<a id="lifetimes-telling-the-compiler-how-long-references-live"></a>
+
 ## 生命周期：告诉编译器引用能活多久
 
 > **你将学到什么：** 为什么生命周期存在（没有 GC 时，编译器需要证明），生命周期标注语法，省略规则，结构体生命周期，`'static` 生命周期，以及常见借用检查器错误与修复方式。

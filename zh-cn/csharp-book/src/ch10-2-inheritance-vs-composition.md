@@ -1,12 +1,13 @@
-## Inheritance vs Composition
+<a id="inheritance-vs-composition"></a>
 
-> **What you'll learn:** Why Rust has no class inheritance, how traits + structs replace deep
-> class hierarchies, and practical patterns for achieving polymorphism through composition.
+# 继承与组合
+
+> **你将学到什么：** 为什么 Rust 没有类继承，trait + struct 如何替代深层类层级，以及如何通过组合实现多态的实用模式。
 >
-> **Difficulty:** 🟡 Intermediate
+> **难度：** 🟡 中级
 
 ```csharp
-// C# - Class-based inheritance
+// C#：基于类的继承
 public abstract class Animal
 {
     public string Name { get; protected set; }
@@ -33,7 +34,7 @@ public class Dog : Animal
     }
 }
 
-// Interface-based contracts
+// 基于 interface 的契约
 public interface IFlyable
 {
     void Fly();
@@ -55,14 +56,15 @@ public class Bird : Animal, IFlyable
 }
 ```
 
-### Rust Composition Model
+### Rust 组合模型
+
 ```rust
-// Rust - Composition over inheritance with traits
+// Rust：用 trait 实现组合优于继承
 pub trait Animal {
     fn name(&self) -> &str;
     fn make_sound(&self);
     
-    // Default implementation (like C# virtual methods)
+    // 默认实现（类似 C# virtual 方法）
     fn sleep(&self) {
         println!("{} is sleeping", self.name());
     }
@@ -72,7 +74,7 @@ pub trait Flyable {
     fn fly(&self);
 }
 
-// Separate data from behavior
+// 数据与行为分离
 #[derive(Debug)]
 pub struct Dog {
     name: String,
@@ -84,7 +86,7 @@ pub struct Bird {
     wingspan: f64,
 }
 
-// Implement behaviors for types
+// 为类型实现行为
 impl Animal for Dog {
     fn name(&self) -> &str {
         &self.name
@@ -121,7 +123,7 @@ impl Flyable for Bird {
     }
 }
 
-// Multiple trait bounds (like multiple interfaces)
+// 多个 trait bound（类似多个 interface）
 fn make_flying_animal_sound<T>(animal: &T) 
 where 
     T: Animal + Flyable,
@@ -133,12 +135,12 @@ where
 
 ```mermaid
 graph TD
-    subgraph "C# Inheritance Hierarchy"
-        CS_ANIMAL["Animal (abstract class)"]
+    subgraph "C# 继承层级"
+        CS_ANIMAL["Animal（抽象类）"]
         CS_DOG["Dog : Animal"]
         CS_BIRD["Bird : Animal, IFlyable"]
-        CS_VTABLE["Virtual method dispatch<br/>Runtime cost"]
-        CS_COUPLING["[ERROR] Tight coupling<br/>[ERROR] Diamond problem<br/>[ERROR] Deep hierarchies"]
+        CS_VTABLE["虚方法分发<br/>运行时成本"]
+        CS_COUPLING["[错误] 紧耦合<br/>[错误] 菱形问题<br/>[错误] 深层层级"]
         
         CS_ANIMAL --> CS_DOG
         CS_ANIMAL --> CS_BIRD
@@ -147,7 +149,7 @@ graph TD
         CS_ANIMAL --> CS_COUPLING
     end
     
-    subgraph "Rust Composition Model"
+    subgraph "Rust 组合模型"
         RUST_ANIMAL["trait Animal"]
         RUST_FLYABLE["trait Flyable"]
         RUST_DOG["struct Dog"]
@@ -155,8 +157,8 @@ graph TD
         RUST_IMPL1["impl Animal for Dog"]
         RUST_IMPL2["impl Animal for Bird"]
         RUST_IMPL3["impl Flyable for Bird"]
-        RUST_STATIC["Static dispatch<br/>Zero cost"]
-        RUST_FLEXIBLE["[OK] Flexible composition<br/>[OK] No hierarchy limits<br/>[OK] Mix and match traits"]
+        RUST_STATIC["静态分发<br/>零成本"]
+        RUST_FLEXIBLE["[OK] 灵活组合<br/>[OK] 没有层级限制<br/>[OK] trait 可自由搭配"]
         
         RUST_DOG --> RUST_IMPL1
         RUST_BIRD --> RUST_IMPL2
@@ -179,12 +181,12 @@ graph TD
 
 ---
 
-## Exercises
+## 练习
 
 <details>
-<summary><strong>🏋️ Exercise: Replace Inheritance with Traits</strong> (click to expand)</summary>
+<summary><strong>🏋️ 练习：用 trait 替代继承</strong>（点击展开）</summary>
 
-This C# code uses inheritance. Rewrite it in Rust using trait composition:
+下面这段 C# 代码使用继承。请用 Rust 的 trait 组合重写它：
 
 ```csharp
 public abstract class Shape { public abstract double Area(); }
@@ -199,14 +201,15 @@ public class Cylinder : Shape3D
 }
 ```
 
-Requirements:
-1. `HasArea` trait with `fn area(&self) -> f64`
-2. `HasVolume` trait with `fn volume(&self) -> f64`
-3. `Cylinder` struct implementing both
-4. A function `fn print_shape_info(shape: &(impl HasArea + HasVolume))` — note the trait bound composition (no inheritance needed)
+要求：
+
+1. `HasArea` trait，包含 `fn area(&self) -> f64`。
+2. `HasVolume` trait，包含 `fn volume(&self) -> f64`。
+3. `Cylinder` 结构体同时实现二者。
+4. 一个函数 `fn print_shape_info(shape: &(impl HasArea + HasVolume))`，注意这里是 trait bound 组合，不需要继承。
 
 <details>
-<summary>🔑 Solution</summary>
+<summary>🔑 参考答案</summary>
 
 ```rust
 use std::f64::consts::PI;
@@ -247,11 +250,9 @@ fn main() {
 }
 ```
 
-**Key insight**: C# needs a 3-level hierarchy (Shape → Shape3D → Cylinder). Rust uses flat trait composition — `impl HasArea + HasVolume` combines capabilities without inheritance depth.
+**关键洞察：** C# 需要 3 层层级（Shape → Shape3D → Cylinder）。Rust 使用扁平的 trait 组合，`impl HasArea + HasVolume` 可以组合能力，不需要继承深度。
 
 </details>
 </details>
 
 ***
-
-

@@ -1,5 +1,7 @@
 # 穷尽匹配与空值安全
 
+<a id="exhaustive-pattern-matching-compiler-guarantees-vs-runtime-errors"></a>
+
 ## 穷尽模式匹配：编译器保证 vs 运行时错误
 
 > **你将学到什么：** 为什么 C# `switch` 表达式会悄悄漏掉分支，而 Rust 的 `match` 会在编译期捕获这些问题；用于空值安全的 `Option<T>` 与 `Nullable<T>` 对比；以及使用 `Result<T, E>` 定义自定义错误类型。
@@ -132,6 +134,8 @@ graph TD
 ```
 
 ***
+
+<a id="null-safety-nullablet-vs-optiont"></a>
 
 ## 空值安全：`Nullable<T>` vs `Option<T>`
 
@@ -372,6 +376,8 @@ fn main() {
 	}
 }
 ```
+
+<a id="custom-error-types"></a>
 
 ### 自定义错误类型
 

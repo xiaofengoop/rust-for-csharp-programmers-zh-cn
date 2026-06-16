@@ -42,6 +42,18 @@
 | runtime overhead | 运行时开销 | 固定译法。 |
 | zero-cost abstraction | 零成本抽象 | 固定译法。 |
 | deterministic performance | 确定性性能 | 固定译法。 |
+| async/await | async/await | 语言关键字和常用技术名，保留英文。 |
+| async runtime | 异步运行时 | 指 tokio、async-std 等执行 async 代码的运行时。 |
+| executor | executor | Rust async 专有概念，保留英文，必要时解释为执行器。 |
+| fearless concurrency | 无畏并发 | 固定译法。 |
+| span | span（作用域上下文） | `tracing` 术语，首次出现时说明含义，后续可用 `span`。 |
+| subscriber | Subscriber / subscriber | `tracing-subscriber` API 概念，保留英文，必要时解释为订阅器。 |
+| structured logging | 结构化日志 | 固定译法。 |
+| observability | 可观测性 | 固定译法。 |
+| benchmark | 基准测试 | 固定译法。 |
+| incremental adoption | 渐进式采用 | 固定译法。 |
+| repository pattern | Repository Pattern（仓储模式） | 首次出现中英对照，后续可用“仓储模式”。 |
+| builder pattern | builder pattern / 构建器模式 | 泛称保留英文或译为构建器模式；标题首次出现中英对照。 |
 | string slice | 字符串切片 | 固定译法。 |
 | mutable / immutable | 可变 / 不可变 | 固定译法。 |
 | variable shadowing | 变量遮蔽 | 固定译法。 |

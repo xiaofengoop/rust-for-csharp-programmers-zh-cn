@@ -30,28 +30,28 @@
 | `csharp-book/src/ch07-1-memory-safety-deep-dive.md` | 已翻译 | 引用、生命周期基础、内存安全与借用检查器保证已中文化。 |
 | `csharp-book/src/ch07-2-lifetimes-deep-dive.md` | 已翻译 | 生命周期标注、省略规则、`'static` 与常见修复模式已中文化。 |
 | `csharp-book/src/ch07-3-smart-pointers-beyond-single-ownership.md` | 已翻译 | `Box<T>`、`Rc<T>`、`Arc<T>`、`RefCell<T>`、`Cow` 与 `Drop` 已中文化。 |
-| `csharp-book/src/ch08-crates-and-modules.md` | 未翻译 |  |
-| `csharp-book/src/ch08-1-package-management-cargo-vs-nuget.md` | 未翻译 |  |
-| `csharp-book/src/ch09-error-handling.md` | 未翻译 |  |
-| `csharp-book/src/ch09-1-crate-level-error-types-and-result-alias.md` | 未翻译 |  |
-| `csharp-book/src/ch10-traits-and-generics.md` | 未翻译 |  |
-| `csharp-book/src/ch10-1-generic-constraints.md` | 未翻译 |  |
-| `csharp-book/src/ch10-2-inheritance-vs-composition.md` | 未翻译 |  |
-| `csharp-book/src/ch11-from-and-into-traits.md` | 未翻译 |  |
-| `csharp-book/src/ch12-closures-and-iterators.md` | 未翻译 |  |
-| `csharp-book/src/ch12-1-macros-primer.md` | 未翻译 |  |
-| `csharp-book/src/ch13-concurrency.md` | 未翻译 |  |
-| `csharp-book/src/ch13-1-asyncawait-deep-dive.md` | 未翻译 |  |
-| `csharp-book/src/ch14-unsafe-rust-and-ffi.md` | 未翻译 |  |
-| `csharp-book/src/ch14-1-testing.md` | 未翻译 |  |
-| `csharp-book/src/ch15-migration-patterns-and-case-studies.md` | 未翻译 |  |
-| `csharp-book/src/ch15-1-essential-crates-for-c-developers.md` | 未翻译 |  |
-| `csharp-book/src/ch15-2-incremental-adoption-strategy.md` | 未翻译 |  |
-| `csharp-book/src/ch16-best-practices.md` | 未翻译 |  |
-| `csharp-book/src/ch16-1-performance-comparison-and-migration.md` | 未翻译 |  |
-| `csharp-book/src/ch16-2-learning-path-and-resources.md` | 未翻译 |  |
-| `csharp-book/src/ch16-3-rust-tooling-ecosystem.md` | 未翻译 |  |
-| `csharp-book/src/ch17-capstone-project.md` | 未翻译 |  |
+| `csharp-book/src/ch08-crates-and-modules.md` | 已翻译 | crate、模块、可见性、文件组织与 workspace 对比已中文化。 |
+| `csharp-book/src/ch08-1-package-management-cargo-vs-nuget.md` | 已翻译 | Cargo/NuGet 依赖、版本、包源、feature 与常见 crate 对照已中文化。 |
+| `csharp-book/src/ch09-error-handling.md` | 已翻译 | `Result<T, E>`、`Option<T>`、`?`、错误传播与练习已中文化。 |
+| `csharp-book/src/ch09-1-crate-level-error-types-and-result-alias.md` | 已翻译 | crate 级错误类型、`thiserror`/`anyhow` 与错误恢复模式已中文化。 |
+| `csharp-book/src/ch10-traits-and-generics.md` | 已翻译 | trait、trait object、派生 trait、关联类型、运算符重载与分发策略已中文化。 |
+| `csharp-book/src/ch10-1-generic-constraints.md` | 已翻译 | trait bound、`where` 子句、条件实现、关联类型与 HRTB 已中文化。 |
+| `csharp-book/src/ch10-2-inheritance-vs-composition.md` | 已翻译 | C# 继承与 Rust trait 组合对比已中文化。 |
+| `csharp-book/src/ch11-from-and-into-traits.md` | 已翻译 | `From`/`Into`、`TryFrom`/`TryInto`、`FromStr` 与字符串转换模式已中文化。 |
+| `csharp-book/src/ch12-closures-and-iterators.md` | 已翻译 | 闭包、`Fn`/`FnMut`/`FnOnce`、LINQ 对比、迭代器与 `itertools` 已中文化。 |
+| `csharp-book/src/ch12-1-macros-primer.md` | 已翻译 | 宏、`macro_rules!`、derive 宏、过程宏、`#[cfg]` 与 `dbg!()` 已中文化。 |
+| `csharp-book/src/ch13-concurrency.md` | 已翻译 | 线程安全、`Arc<Mutex<T>>`、channel、`Send`/`Sync` 与 scoped thread 已中文化。 |
+| `csharp-book/src/ch13-1-asyncawait-deep-dive.md` | 已翻译 | `Future`/`Task`、executor、取消、`tokio::select!`、`tokio::spawn` 与 `Pin` 已中文化。 |
+| `csharp-book/src/ch14-unsafe-rust-and-ffi.md` | 已翻译 | `unsafe`、safe wrapper、C# P/Invoke、Rust FFI 与安全检查清单已中文化。 |
+| `csharp-book/src/ch14-1-testing.md` | 已翻译 | `#[test]`、`rstest`、`mockall`、`proptest` 与集成测试组织已中文化。 |
+| `csharp-book/src/ch15-migration-patterns-and-case-studies.md` | 已翻译 | 迁移模式、C# 模式映射、案例研究与练习已中文化。 |
+| `csharp-book/src/ch15-1-essential-crates-for-c-developers.md` | 已翻译 | C# 开发者常用 crate、serde 深入与属性速查已中文化。 |
+| `csharp-book/src/ch15-2-incremental-adoption-strategy.md` | 已翻译 | 渐进式采用阶段、团队时间线与推荐练习已中文化。 |
+| `csharp-book/src/ch16-best-practices.md` | 已翻译 | 心智转变、代码组织、错误处理、测试模式与常见错误已中文化。 |
+| `csharp-book/src/ch16-1-performance-comparison-and-migration.md` | 已翻译 | 性能对比、负载示例、语言选择建议与迁移决策树已中文化。 |
+| `csharp-book/src/ch16-2-learning-path-and-resources.md` | 已翻译 | 学习路径、资源、常见陷阱与 `tracing` 可观测性已中文化。 |
+| `csharp-book/src/ch16-3-rust-tooling-ecosystem.md` | 已翻译 | Clippy、rustfmt、cargo doc/watch/expand 与 VS Code 工具链已中文化。 |
+| `csharp-book/src/ch17-capstone-project.md` | 已翻译 | CLI 天气工具综合项目、模块布局、错误处理、测试与扩展挑战已中文化。 |
 
 ## 翻译规范
 

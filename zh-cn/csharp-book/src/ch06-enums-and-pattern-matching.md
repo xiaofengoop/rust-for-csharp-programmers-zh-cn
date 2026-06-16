@@ -1,5 +1,7 @@
 # 6. 枚举与模式匹配
 
+<a id="algebraic-data-types-vs-c-unions"></a>
+
 ## 代数数据类型 vs C# Union
 
 > **你将学到什么：** Rust 的代数数据类型（带数据的枚举）与 C# 中有限的可辨识联合类型，带穷尽检查的 `match` 表达式，guard clause，以及嵌套模式解构。
@@ -311,6 +313,8 @@ fn handle_http_response(response: HttpResponse) -> String {
 	}
 }
 ```
+
+<a id="guards-and-advanced-patterns"></a>
 
 ### Guard 与高级模式
 

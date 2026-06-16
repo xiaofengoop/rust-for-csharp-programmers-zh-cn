@@ -1,5 +1,7 @@
 # 核心关键字速查 (可选)
 
+<a id="essential-rust-keywords-for-c-developers"></a>
+
 ## 面向 C# 开发者的核心 Rust 关键字
 
 > **你将学到什么：** Rust 关键字与 C# 对应概念的速查映射，包括可见性修饰符、所有权关键字、控制流、类型定义和模式匹配语法。

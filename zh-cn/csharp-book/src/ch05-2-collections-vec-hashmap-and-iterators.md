@@ -1,5 +1,7 @@
 # 集合：Vec、HashMap 与迭代器
 
+<a id="vect-vs-listt"></a>
+
 ## `Vec<T>` vs `List<T>`
 
 > **你将学到什么：** `Vec<T>` 与 `List<T>` 的对比，`HashMap` 与 `Dictionary` 的对比，安全访问模式（为什么 Rust 返回 `Option` 而不是抛异常），以及集合带来的所有权影响。
@@ -153,6 +155,8 @@ fn main() {
 ```
 
 ***
+
+<a id="hashmap-vs-dictionary"></a>
 
 ## HashMap vs Dictionary
 

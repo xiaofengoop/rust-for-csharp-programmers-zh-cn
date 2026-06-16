@@ -1,5 +1,7 @@
 # 内存安全深入解析
 
+<a id="references-vs-pointers"></a>
+
 ## 引用 vs 指针
 
 > **你将学到什么：** Rust 引用与 C# 指针和 unsafe 上下文的对比，生命周期基础，以及为什么编译期安全证明比 C# 的运行时检查（边界检查、null guard）更强。

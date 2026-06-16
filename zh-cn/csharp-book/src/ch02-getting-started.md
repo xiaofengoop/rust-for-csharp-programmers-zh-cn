@@ -1,5 +1,7 @@
 # 2. 入门准备
 
+<a id="installation-and-setup"></a>
+
 ## 安装与环境配置
 
 > **你将学到什么：** 如何安装 Rust 并配置 IDE，Cargo 构建系统与 MSBuild/NuGet 的差异，第一个 Rust 程序如何对应 C#，以及如何读取命令行输入。
@@ -40,6 +42,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    - 类似 C# 开发中的 Rider
 
 ***
+
+<a id="your-first-rust-program"></a>
 
 ## 你的第一个 Rust 程序
 
@@ -96,6 +100,8 @@ cargo run
 ```
 
 ***
+
+<a id="cargo-vs-nugetmsbuild"></a>
 
 ## Cargo 与 NuGet/MSBuild
 
@@ -179,6 +185,8 @@ members = [
 ```
 
 ***
+
+<a id="reading-input-and-cli-arguments"></a>
 
 ## 读取输入与 CLI 参数
 

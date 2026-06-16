@@ -1,5 +1,7 @@
 # 5. 数据结构与集合
 
+<a id="tuples-and-destructuring"></a>
+
 ## 元组与解构
 
 > **你将学到什么：** Rust 元组与 C# `ValueTuple` 的对比，数组与切片，结构体与类，使用 newtype 模式以零成本类型安全进行领域建模，以及解构语法。
@@ -187,6 +189,8 @@ fn lookup(id: u64) -> Option<User> { /* ... */ }
 
 ***
 
+<a id="arrays-and-slices"></a>
+
 ## 数组与切片
 
 理解数组、切片和 vector 之间的区别非常关键。
@@ -350,6 +354,8 @@ let buffer: [i32; 5] = [0; 5];
 > **关键洞察：** Rust 的 `&[T]` 结合了 C# 中 `ArraySegment<T>`、`Span<T>` 和 `ReadOnlySpan<T>` 的角色。它是一个胖指针（指针 + 长度），可用于数组、vector 和子切片。C# 的 Inline Arrays 可以自然映射到 Rust 的 `[T; N]` 数组，后者默认也分配在栈上。
 
 ***
+
+<a id="structs-vs-classes"></a>
 
 ## 结构体与类
 

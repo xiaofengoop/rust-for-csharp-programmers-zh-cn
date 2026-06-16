@@ -1,13 +1,17 @@
-## Testing in Rust vs C#
+# 测试
 
-> **What you'll learn:** Built-in `#[test]` vs xUnit, parameterized tests with `rstest` (like `[Theory]`),
-> property testing with `proptest`, mocking with `mockall`, and async test patterns.
+<a id="testing-in-rust-vs-c"></a>
+
+## Rust 测试与 C# 测试
+
+> **你将学到什么：** 内置 `#[test]` 与 xUnit 的对比，使用 `rstest` 编写参数化测试（类似 `[Theory]`），使用 `proptest` 做属性测试，使用 `mockall` 做 mock，以及 async 测试模式。
 >
-> **Difficulty:** 🟡 Intermediate
+> **难度：** 🟡 中级
 
-### Unit Tests
+### 单元测试
+
 ```csharp
-// C# — xUnit
+// C#：xUnit
 using Xunit;
 
 public class CalculatorTests
@@ -31,12 +35,12 @@ public class CalculatorTests
 ```
 
 ```rust
-// Rust — built-in testing, no external framework needed
+// Rust：内置测试，不需要外部框架
 pub fn add(a: i32, b: i32) -> i32 { a + b }
 
-#[cfg(test)]  // Only compiled during `cargo test`
+#[cfg(test)]  // 只在 `cargo test` 时编译
 mod tests {
-    use super::*;  // Import from parent module
+    use super::*;  // 从父模块导入
 
     #[test]
     fn add_returns_sum() {
@@ -51,14 +55,15 @@ mod tests {
     #[test]
     #[should_panic(expected = "overflow")]
     fn add_overflow_panics() {
-        let _ = add(i32::MAX, 1); // panics in debug mode
+        let _ = add(i32::MAX, 1); // debug 模式下会 panic
     }
 }
 ```
 
-### Parameterized Tests (like `[Theory]`)
+### 参数化测试（类似 `[Theory]`）
+
 ```rust
-// Use the `rstest` crate for parameterized tests
+// 使用 `rstest` crate 编写参数化测试
 use rstest::rstest;
 
 #[rstest]
@@ -69,41 +74,41 @@ fn test_add(#[case] a: i32, #[case] b: i32, #[case] expected: i32) {
     assert_eq!(add(a, b), expected);
 }
 
-// Fixtures — like test setup methods
+// Fixture：类似测试 setup 方法
 #[rstest]
 fn test_with_fixture(#[values(1, 2, 3)] x: i32) {
     assert!(x > 0);
 }
 ```
 
-### Assertions Comparison
+### 断言对比
 
-| C# (xUnit) | Rust | Notes |
+| C# (xUnit) | Rust | 说明 |
 |-------------|------|-------|
-| `Assert.Equal(expected, actual)` | `assert_eq!(expected, actual)` | Prints diff on failure |
+| `Assert.Equal(expected, actual)` | `assert_eq!(expected, actual)` | 失败时打印 diff |
 | `Assert.NotEqual(a, b)` | `assert_ne!(a, b)` | |
 | `Assert.True(condition)` | `assert!(condition)` | |
 | `Assert.Contains("sub", str)` | `assert!(str.contains("sub"))` | |
-| `Assert.Throws<T>(() => ...)` | `#[should_panic]` | Or use `std::panic::catch_unwind` |
-| `Assert.Null(obj)` | `assert!(option.is_none())` | No nulls — use `Option` |
+| `Assert.Throws<T>(() => ...)` | `#[should_panic]` | 或使用 `std::panic::catch_unwind` |
+| `Assert.Null(obj)` | `assert!(option.is_none())` | Rust 没有 null，使用 `Option` |
 
-### Test Organization
+### 测试组织
 
 ```text
 my_crate/
 ├── src/
-│   ├── lib.rs          # Unit tests in #[cfg(test)] mod tests { }
-│   └── parser.rs       # Each module can have its own test module
-├── tests/              # Integration tests (each file is a separate crate)
-│   ├── parser_test.rs  # Tests the public API as an external consumer
+│   ├── lib.rs          # 单元测试在 #[cfg(test)] mod tests { } 中
+│   └── parser.rs       # 每个模块都可以有自己的 test 模块
+├── tests/              # 集成测试（每个文件都是单独 crate）
+│   ├── parser_test.rs  # 像外部调用方一样测试公开 API
 │   └── api_test.rs
-└── benches/            # Benchmarks (with criterion crate)
+└── benches/            # Benchmark（使用 criterion crate）
     └── my_benchmark.rs
 ```
 
 ```rust
-// tests/parser_test.rs — integration test
-// Can only access PUBLIC API (like testing from outside the assembly)
+// tests/parser_test.rs：集成测试
+// 只能访问公开 API（类似从 assembly 外部进行测试）
 use my_crate::parser;
 
 #[test]
@@ -113,9 +118,10 @@ fn test_parse_valid_input() {
 }
 ```
 
-### Async Tests
+### Async 测试
+
 ```csharp
-// C# — async test with xUnit
+// C#：xUnit async 测试
 [Fact]
 public async Task GetUser_ReturnsUser()
 {
@@ -126,7 +132,7 @@ public async Task GetUser_ReturnsUser()
 ```
 
 ```rust
-// Rust — async test with tokio
+// Rust：使用 tokio 的 async 测试
 #[tokio::test]
 async fn get_user_returns_user() {
     let service = UserService::new();
@@ -135,11 +141,12 @@ async fn get_user_returns_user() {
 }
 ```
 
-### Mocking with mockall
+### 使用 mockall 做 Mock
+
 ```rust
 use mockall::automock;
 
-#[automock]                         // Generates MockUserRepo struct
+#[automock]                         // 生成 MockUserRepo 结构体
 trait UserRepo {
     fn find_by_id(&self, id: u32) -> Option<User>;
 }
@@ -163,7 +170,7 @@ mod tests {
 ```
 
 ```csharp
-// C# — Moq equivalent
+// C#：Moq 等价写法
 var mock = new Mock<IUserRepo>();
 mock.Setup(r => r.FindById(1)).Returns(new User { Name = "Alice" });
 var service = new UserService(mock.Object);
@@ -171,9 +178,9 @@ Assert.Equal("Alice", service.GetUser(1).Name);
 ```
 
 <details>
-<summary><strong>🏋️ Exercise: Write Comprehensive Tests</strong> (click to expand)</summary>
+<summary><strong>🏋️ 练习：编写全面测试</strong>（点击展开）</summary>
 
-**Challenge**: Given this function, write tests covering: happy path, empty input, numeric strings, and Unicode.
+**挑战：** 给定下面这个函数，编写测试覆盖：正常路径、空输入、数字字符串和 Unicode。
 
 ```rust
 pub fn title_case(input: &str) -> String {
@@ -191,7 +198,7 @@ pub fn title_case(input: &str) -> String {
 ```
 
 <details>
-<summary>🔑 Solution</summary>
+<summary>🔑 参考答案</summary>
 
 ```rust
 #[cfg(test)]
@@ -225,7 +232,7 @@ mod tests {
 
     #[test]
     fn extra_whitespace() {
-        // split_whitespace handles multiple spaces
+        // split_whitespace 会处理多个空格
         assert_eq!(title_case("  hello   world  "), "Hello World");
     }
 
@@ -241,20 +248,23 @@ mod tests {
 }
 ```
 
-**Key takeaway**: Rust's built-in test framework handles most unit testing needs. Use `rstest` for parameterized tests and `mockall` for mocking — no need for a large test framework like xUnit.
+**关键要点：** Rust 内置测试框架可以覆盖大多数单元测试需求。使用 `rstest` 编写参数化测试，使用 `mockall` 做 mock，不需要像 xUnit 那样的大型测试框架。
 
 </details>
 </details>
 
 
 <!-- ch14a.1: Property Testing with proptest -->
-## Property Testing: Proving Correctness at Scale
+<a id="property-testing-proving-correctness-at-scale"></a>
 
-C# developers familiar with **FsCheck** will recognize property-based testing: instead of writing individual test cases, you describe *properties* that must hold for **all possible inputs**, and the framework generates thousands of random inputs to try to break them.
+## 属性测试：大规模证明正确性
 
-### Why Property Testing Matters
+熟悉 **FsCheck** 的 C# 开发者会认出 property-based testing：你不是编写一个个具体测试用例，而是描述对**所有可能输入**都必须成立的性质，然后由框架生成成千上万个随机输入来尝试打破它。
+
+### 为什么属性测试重要
+
 ```csharp
-// C# — Hand-written unit tests check specific cases
+// C#：手写单元测试只检查特定用例
 [Fact]
 public void Reverse_Twice_Returns_Original()
 {
@@ -263,12 +273,12 @@ public void Reverse_Twice_Returns_Original()
     list.Reverse();
     Assert.Equal(new[] { 1, 2, 3 }, list);
 }
-// But what about empty lists? Single elements? 10,000 elements? Negative numbers?
-// You'd need dozens of hand-written cases.
+// 那空列表呢？单元素呢？10,000 个元素呢？负数呢？
+// 你需要手写大量用例。
 ```
 
 ```rust
-// Rust — proptest generates thousands of inputs automatically
+// Rust：proptest 自动生成上千个输入
 use proptest::prelude::*;
 
 fn reverse<T: Clone>(v: &[T]) -> Vec<T> {
@@ -281,26 +291,27 @@ proptest! {
         let reversed_twice = reverse(&reverse(v));
         prop_assert_eq!(v, &reversed_twice);
     }
-    // proptest runs this with hundreds of random Vec<i32> values:
-    // [], [0], [i32::MIN, i32::MAX], [42; 999], random sequences...
-    // If it fails, it SHRINKS to the smallest failing input!
+    // proptest 会用数百个随机 Vec<i32> 值运行这段测试：
+    // [], [0], [i32::MIN, i32::MAX], [42; 999], 随机序列...
+    // 如果失败，它会 SHRINK 到最小失败输入！
 }
 ```
 
-### Getting Started with proptest
+### proptest 入门
+
 ```toml
 # Cargo.toml
 [dev-dependencies]
 proptest = "1.4"
 ```
 
-### Common Patterns for C# Developers
+### C# 开发者常用模式
 
 ```rust
 use proptest::prelude::*;
 
-// 1. Roundtrip property: serialize → deserialize = identity
-// (Like testing JsonSerializer.Serialize → Deserialize)
+// 1. Roundtrip 性质：serialize → deserialize = identity
+// （类似测试 JsonSerializer.Serialize → Deserialize）
 proptest! {
     #[test]
     fn json_roundtrip(name in "[a-zA-Z]{1,50}", age in 0u32..150) {
@@ -311,20 +322,20 @@ proptest! {
     }
 }
 
-// 2. Invariant property: output always satisfies a condition
+// 2. 不变量性质：输出总是满足某个条件
 proptest! {
     #[test]
     fn sort_output_is_sorted(ref v in prop::collection::vec(any::<i32>(), 0..500)) {
         let mut sorted = v.clone();
         sorted.sort();
-        // Every adjacent pair must be in order
+        // 每对相邻元素都必须有序
         for window in sorted.windows(2) {
             prop_assert!(window[0] <= window[1]);
         }
     }
 }
 
-// 3. Oracle property: compare two implementations
+// 3. Oracle 性质：比较两个实现
 proptest! {
     #[test]
     fn fast_path_matches_slow_path(input in "[0-9a-f]{1,100}") {
@@ -334,7 +345,7 @@ proptest! {
     }
 }
 
-// 4. Custom strategies: generate domain-specific test data
+// 4. 自定义 strategy：生成领域专用测试数据
 fn valid_email() -> impl Strategy<Value = String> {
     ("[a-z]{1,20}", "[a-z]{1,10}", prop::sample::select(vec!["com", "org", "io"]))
         .prop_map(|(user, domain, tld)| format!("{}@{}.{}", user, domain, tld))
@@ -349,32 +360,32 @@ proptest! {
 }
 ```
 
-### proptest vs FsCheck Comparison
+### proptest 与 FsCheck 对比
 
-| Feature | C# FsCheck | Rust proptest |
+| 功能 | C# FsCheck | Rust proptest |
 |---------|-----------|---------------|
-| Random input generation | `Arb.Generate<T>()` | `any::<T>()` |
-| Custom generators | `Arb.Register<T>()` | `impl Strategy<Value = T>` |
-| Shrinking on failure | Automatic | Automatic |
-| String patterns | Manual | `"[regex]"` strategy |
-| Collection generation | `Gen.ListOf` | `prop::collection::vec(strategy, range)` |
-| Composing generators | `Gen.Select` | `.prop_map()`, `.prop_flat_map()` |
-| Config (# of cases) | `Config.MaxTest` | `#![proptest_config(ProptestConfig::with_cases(10000))]` inside `proptest!` block |
+| 随机输入生成 | `Arb.Generate<T>()` | `any::<T>()` |
+| 自定义生成器 | `Arb.Register<T>()` | `impl Strategy<Value = T>` |
+| 失败后 shrink | 自动 | 自动 |
+| 字符串模式 | 手写 | `"[regex]"` strategy |
+| 集合生成 | `Gen.ListOf` | `prop::collection::vec(strategy, range)` |
+| 组合生成器 | `Gen.Select` | `.prop_map()`、`.prop_flat_map()` |
+| 配置（case 数量） | `Config.MaxTest` | 在 `proptest!` 块中使用 `#![proptest_config(ProptestConfig::with_cases(10000))]` |
 
-### When to Use Property Testing vs Unit Testing
+### 什么时候用属性测试，什么时候用单元测试
 
-| Use **unit tests** when | Use **proptest** when |
+| 使用**单元测试**的场景 | 使用 **proptest** 的场景 |
 |------------------------|----------------------|
-| Testing specific edge cases | Verifying invariants across all inputs |
-| Testing error messages/codes | Roundtrip properties (parse ↔ format) |
-| Integration/mock tests | Comparing two implementations |
-| Behavior depends on exact values | "For all X, property P holds" |
+| 测试特定边界情况 | 在所有输入上验证不变量 |
+| 测试错误消息/错误码 | Roundtrip 性质（parse ↔ format） |
+| 集成/mock 测试 | 比较两个实现 |
+| 行为依赖精确取值 | “对所有 X，性质 P 成立” |
 
 ---
 
-## Integration Tests: the `tests/` Directory
+## 集成测试：`tests/` 目录
 
-Unit tests live inside `src/` with `#[cfg(test)]`. Integration tests live in a separate `tests/` directory and test your crate's **public API** — just like how C# integration tests reference the project as an external assembly.
+单元测试位于 `src/` 中的 `#[cfg(test)]` 代码块内。集成测试位于单独的 `tests/` 目录中，用来测试你的 crate 的**公开 API**，就像 C# 集成测试会把项目当作外部 assembly 来引用。
 
 ```
 my_crate/
@@ -382,19 +393,19 @@ my_crate/
 │   ├── lib.rs          // public API
 │   └── internal.rs     // private implementation
 ├── tests/
-│   ├── smoke.rs        // each file is a separate test binary
+│   ├── smoke.rs        // 每个文件都是单独的测试 binary
 │   ├── api_tests.rs
 │   └── common/
-│       └── mod.rs      // shared test helpers
+│       └── mod.rs      // 共享测试 helper
 └── Cargo.toml
 ```
 
-### Writing Integration Tests
+### 编写集成测试
 
-Each file in `tests/` is compiled as a separate crate that depends on your library:
+`tests/` 中的每个文件都会被编译为一个依赖你的库的独立 crate：
 
 ```rust
-// tests/smoke.rs — can only access pub items from my_crate
+// tests/smoke.rs：只能访问 my_crate 的 pub 条目
 use my_crate::{process_order, Order, OrderResult};
 
 #[test]
@@ -405,9 +416,9 @@ fn process_valid_order_returns_confirmation() {
 }
 ```
 
-### Shared Test Helpers
+### 共享测试 helper
 
-Put shared setup code in `tests/common/mod.rs` (not `tests/common.rs`, which would be treated as its own test file):
+把共享 setup 代码放到 `tests/common/mod.rs`，不要放在 `tests/common.rs`，否则它会被当成自己的测试文件：
 
 ```rust
 // tests/common/mod.rs
@@ -435,17 +446,15 @@ fn app_starts_with_test_config() {
 }
 ```
 
-### Running Specific Test Types
+### 运行特定类型测试
 
 ```bash
-cargo test                  # run all tests (unit + integration)
-cargo test --lib            # unit tests only (like dotnet test --filter Category=Unit)
-cargo test --test smoke     # run only tests/smoke.rs
-cargo test --test api_tests # run only tests/api_tests.rs
+cargo test                  # 运行所有测试（单元 + 集成）
+cargo test --lib            # 只运行单元测试（类似 dotnet test --filter Category=Unit）
+cargo test --test smoke     # 只运行 tests/smoke.rs
+cargo test --test api_tests # 只运行 tests/api_tests.rs
 ```
 
-**Key difference from C#:** Integration test files can only access your crate's `pub` API. Private functions are invisible — this forces you to test through the public interface, which is generally better test design.
+**与 C# 的关键差异：** 集成测试文件只能访问你的 crate 的 `pub` API。私有函数不可见，这会迫使你通过公开接口测试，通常能带来更好的测试设计。
 
 ***
-
-

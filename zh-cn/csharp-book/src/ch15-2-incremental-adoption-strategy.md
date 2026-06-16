@@ -1,15 +1,15 @@
-## Incremental Adoption Strategy
+<a id="incremental-adoption-strategy"></a>
+## 渐进式采用策略
 
-> **What you'll learn:** A phased approach to introducing Rust in a C#/.NET organization —
-> from learning exercises (weeks 1–4) to performance-critical replacements (weeks 5–8)
-> to new microservices (weeks 9–12), with concrete team adoption timelines.
+> **你将学到什么：** 在 C#/.NET 组织中引入 Rust 的分阶段方法：从学习练习（第 1-4 周），到替换性能关键组件（第 5-8 周），再到开发新微服务（第 9-12 周），并配套具体的团队采用时间线。
 >
-> **Difficulty:** 🟡 Intermediate
+> **难度：** 🟡 中级
 
-### Phase 1: Learning and Experimentation (Weeks 1-4)
+### 阶段 1：学习与实验（第 1-4 周）
+
 ```rust
-// Start with command-line tools and utilities
-// Example: Log file analyzer
+// 从命令行工具和实用程序开始
+// 示例：日志文件分析器
 use std::fs;
 use std::collections::HashMap;
 use clap::Parser;
@@ -48,10 +48,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-### Phase 2: Replace Performance-Critical Components (Weeks 5-8)
+### 阶段 2：替换性能关键组件（第 5-8 周）
+
 ```rust
-// Replace CPU-intensive data processing
-// Example: Image processing microservice
+// 替换 CPU 密集型数据处理逻辑
+// 示例：图像处理微服务
 use image::{DynamicImage, ImageBuffer, Rgb};
 use serde::{Deserialize, Serialize};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
@@ -120,10 +121,11 @@ struct ProcessingError(String);
 impl warp::reject::Reject for ProcessingError {}
 ```
 
-### Phase 3: New Microservices (Weeks 9-12)
+### 阶段 3：新微服务（第 9-12 周）
+
 ```rust
-// Build new services from scratch in Rust
-// Example: Authentication service
+// 从零开始用 Rust 构建新服务
+// 示例：认证服务
 use axum::{
     extract::{Query, State},
     http::StatusCode,
@@ -165,9 +167,9 @@ async fn login(
     State(state): State<AppState>,
     Json(request): Json<LoginRequest>,
 ) -> Result<Json<LoginResponse>, StatusCode> {
-    // Note: sqlx::query!() is compile-time checked and requires DATABASE_URL
-    // pointing to a live database during build. For runtime-checked queries,
-    // use sqlx::query() or sqlx::query_as() instead.
+    // 注意：sqlx::query!() 会在编译期检查查询，并要求构建时 DATABASE_URL
+    // 指向一个可用数据库。若需要运行期检查查询，
+    // 可改用 sqlx::query() 或 sqlx::query_as()。
     let user = sqlx::query!(
         "SELECT id, password_hash FROM users WHERE email = $1",
         request.email
@@ -230,22 +232,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ***
 
-## Team Adoption Timeline
+## 团队采用时间线
 
-### Month 1: Foundation
-**Week 1-2: Syntax and Ownership**
-- Basic syntax differences from C#
-- Understanding ownership, borrowing, and lifetimes
-- Small exercises: CLI tools, file processing
+### 第 1 个月：打基础
 
-**Week 3-4: Error Handling and Types**
-- `Result<T, E>` vs exceptions
-- `Option<T>` vs nullable types
-- Pattern matching and exhaustive checking
+**第 1-2 周：语法与所有权**
 
-**Recommended exercises:**
+- 与 C# 的基本语法差异。
+- 理解所有权、借用和生命周期。
+- 小练习：CLI 工具、文件处理。
+
+**第 3-4 周：错误处理与类型**
+
+- `Result<T, E>` 与异常的对比。
+- `Option<T>` 与 nullable 类型的对比。
+- 模式匹配与穷尽检查。
+
+**推荐练习：**
+
 ```rust
-// Week 1-2: File processor
+// 第 1-2 周：文件处理器
 fn process_log_file(path: &str) -> Result<Vec<String>, std::io::Error> {
     let content = std::fs::read_to_string(path)?;
     let errors: Vec<String> = content
@@ -256,7 +262,7 @@ fn process_log_file(path: &str) -> Result<Vec<String>, std::io::Error> {
     Ok(errors)
 }
 
-// Week 3-4: JSON processor with error handling
+// 第 3-4 周：带错误处理的 JSON 处理器
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -272,20 +278,24 @@ fn parse_log_entries(json_str: &str) -> Result<Vec<LogEntry>, Box<dyn std::error
 }
 ```
 
-### Month 2: Practical Applications
-**Week 5-6: Traits and Generics**
-- Trait system vs interfaces
-- Generic constraints and bounds
-- Common patterns and idioms
+### 第 2 个月：实际应用
 
-**Week 7-8: Async Programming and Concurrency**
-- `async`/`await` similarities and differences
-- Channels for communication
-- Thread safety guarantees
+**第 5-6 周：trait 与泛型**
 
-**Recommended projects:**
+- trait 系统与 interface 的对比。
+- 泛型约束和 bound。
+- 常见模式和惯用法。
+
+**第 7-8 周：异步编程与并发**
+
+- `async`/`await` 的相似点与差异。
+- 用 channel 做通信。
+- 线程安全保证。
+
+**推荐项目：**
+
 ```rust
-// Week 5-6: Generic data processor
+// 第 5-6 周：泛型数据处理器
 trait DataProcessor<T> {
     type Output;
     type Error;
@@ -304,7 +314,7 @@ impl DataProcessor<&str> for JsonProcessor {
     }
 }
 
-// Week 7-8: Async web client
+// 第 7-8 周：异步 Web 客户端
 async fn fetch_and_process_data(urls: Vec<&str>) -> Result<(), Box<dyn std::error::Error>> {
     let client = reqwest::Client::new();
     
@@ -329,18 +339,17 @@ async fn fetch_and_process_data(urls: Vec<&str>) -> Result<(), Box<dyn std::erro
 }
 ```
 
-### Month 3+: Production Integration
-**Week 9-12: Real Project Work**
-- Choose a non-critical component to rewrite
-- Implement comprehensive error handling
-- Add logging, metrics, and testing
-- Performance profiling and optimization
+### 第 3 个月及之后：生产集成
 
-**Ongoing: Team Review and Mentoring**
-- Code reviews focusing on Rust idioms
-- Pair programming sessions
-- Knowledge sharing sessions
+**第 9-12 周：真实项目工作**
 
-***
+- 选择一个非关键组件进行重写。
+- 实现完整的错误处理。
+- 加入日志、指标和测试。
+- 做性能分析与优化。
 
+**持续进行：团队评审与辅导**
 
+- 代码评审重点关注 Rust 惯用法。
+- 结对编程会议。
+- 知识分享会议。
