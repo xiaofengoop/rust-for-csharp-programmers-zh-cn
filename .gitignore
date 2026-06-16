@@ -1,10 +1,15 @@
-# mdbook build output
-**/book/
+# mdBook build output
+zh-cn/csharp-book/book/
 
-# xtask output
-site/
-docs/
-target/
+# Local exported artifacts
+zh-cn/exports/
 
-# Zone.Identifier files (Windows/WSL artifact)
-*:Zone.Identifier
+# Temporary/local PDF tooling
+zh-cn/tools/
+
+# Editor-local workspace files
+.vscode/
+
+# Node dependencies, if local tooling is re-enabled later
+node_modules/
+**/node_modules/
