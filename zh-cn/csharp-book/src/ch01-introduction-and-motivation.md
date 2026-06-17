@@ -317,7 +317,7 @@ fn add_origin(config: &mut Config, origin: String) {
 }
 ```
 
-#### 函数式编程：一等公民与事后补上的能力
+#### 函数式编程：语言内置支持与后续增强
 
 ```csharp
 // C# — 函数式能力是后加的；LINQ 很有表达力，但语言本身并不总是配合
@@ -338,7 +338,7 @@ public IEnumerable<Order> GetHighValueOrders(IEnumerable<Order> orders)
 ```
 
 ```rust
-// Rust — 函数式编程是一等公民
+// Rust — 函数式风格是语言设计的一部分
 fn get_high_value_orders(orders: &[Order]) -> Vec<OrderSummary> {
 	orders.iter()
 		.filter(|o| o.total > 1000)      // 零成本闭包，无堆分配
@@ -377,7 +377,7 @@ public class RobotDog : Dog
 }
 
 // 常见 C# 反模式：
-// - 拥有 20 个虚方法的上帝基类
+// - 塞进大量虚方法的超大基类
 // - 深层级继承（5 层以上），没人能完整推理
 // - "protected" 字段制造隐藏耦合
 // - 基类变化静默改变派生类行为
@@ -415,7 +415,7 @@ impl Greeter for RobotDog {} // 清晰、显式的行为
 // 给 Speaker 添加方法？编译器会告诉你每个需要实现的位置。
 ```
 
-> **关键洞察**：在 C# 中，很多正确性依赖团队纪律：你希望开发者遵守约定、编写测试，并在代码审查中发现边界情况。<br>
+> **关键洞察**：在 C# 中，很多正确性依赖团队规范：你希望开发者遵守约定、编写测试，并在代码审查中发现边界情况。<br>
 > 在 Rust 中，一部分正确性可以前移到**类型系统**：空值、遗忘变体、意外修改、数据竞争等问题能在安全代码中被结构化地排除。业务规则、死锁、资源耗尽和错误建模仍然需要工程设计。
 
 ***
@@ -424,17 +424,17 @@ impl Greeter for RobotDog {} // 清晰、显式的行为
 
 ```csharp
 // C# - GC 可能在任何时候暂停
-public class HighFrequencyTrader
+public class LowLatencyProcessor
 {
-	private List<Trade> trades = new List<Trade>();
+	private List<ProcessedEvent> events = new List<ProcessedEvent>();
     
-	public void ProcessMarketData(MarketTick tick)
+	public void ProcessEvent(InputEvent input)
 	{
 		// 分配可能在最糟糕的时间点触发 GC
-		var analysis = new MarketAnalysis(tick);
-		trades.Add(new Trade(analysis.Signal, tick.Price));
+		var analysis = new EventAnalysis(input);
+		events.Add(new ProcessedEvent(analysis.Signal, input.Value));
         
-		// GC 可能在关键市场时刻暂停这里
+		// GC 可能在最不该停顿的时候暂停这里
 		// 暂停时长：取决于堆大小，可能是 1-100ms
 	}
 }
@@ -442,21 +442,21 @@ public class HighFrequencyTrader
 
 ```rust
 // Rust - 可预测、确定性的性能
-struct HighFrequencyTrader {
-	trades: Vec<Trade>,
+struct LowLatencyProcessor {
+	events: Vec<ProcessedEvent>,
 }
 
-impl HighFrequencyTrader {
-	fn process_market_data(&mut self, tick: MarketTick) {
-		// 在把 `tick` 移入 analysis 之前先取出 Copy 字段
-		let price = tick.price;
+impl LowLatencyProcessor {
+	fn process_event(&mut self, input: InputEvent) {
+		// 在把 `input` 移入 analysis 之前先取出 Copy 字段
+		let value = input.value;
 
 		// 零分配，可预测性能
-		let analysis = MarketAnalysis::from(tick);
-		self.trades.push(Trade::new(analysis.signal(), price));
+		let analysis = EventAnalysis::from(input);
+		self.events.push(ProcessedEvent::new(analysis.signal(), value));
         
-		// 没有 GC 暂停，延迟稳定在亚微秒级
-		// 性能由类型系统保证
+		// 没有由 GC 引入的暂停，延迟更可控
+		// 性能边界更容易从代码结构中看出来
 	}
 }
 ```
@@ -469,10 +469,10 @@ impl HighFrequencyTrader {
 
 ### 选择 Rust 的场景
 
-- **正确性很重要**：状态机、协议实现、金融逻辑等，一处遗漏就是生产事故，而不只是测试失败
-- **性能至关重要**：实时系统、高频交易、游戏引擎
-- **内存使用很重要**：嵌入式系统、云成本、移动应用
-- **需要可预测性**：医疗设备、汽车、金融系统
+- **正确性很重要**：状态机、协议实现、计费逻辑等，一处遗漏就是线上事故，而不只是测试失败
+- **性能至关重要**：低延迟服务、大吞吐数据处理、游戏引擎
+- **内存使用很重要**：嵌入式系统、云资源成本、移动应用
+- **需要可预测性**：基础设施组件、边缘设备、延迟敏感服务
 - **安全性最关键**：密码学、网络安全、系统级代码
 - **长时间运行的服务**：GC 暂停会造成问题的场景
 - **资源受限环境**：IoT、边缘计算
@@ -485,7 +485,7 @@ impl HighFrequencyTrader {
 - **团队专长**：Rust 学习曲线无法抵消收益
 - **企业集成**：重度依赖 .NET Framework 或 Windows
 - **GUI 应用**：WPF、WinUI、Blazor 生态
-- **上市时间优先**：开发速度比性能更重要
+- **上线速度优先**：开发速度比性能更重要
 
 ### 同时考虑两者：混合方式
 
@@ -521,22 +521,22 @@ impl HighFrequencyTrader {
 2. **职业成长**：系统编程能力越来越有价值
 3. **性能理解**：学习零成本抽象
 4. **安全思维**：把所有权思维应用到任何语言中
-5. **云成本**：性能会直接影响基础设施支出
+5. **基础设施成本**：性能会直接影响服务器和云资源支出
 
 ***
 
 <a id="language-philosophy-comparison"></a>
 
-## 语言哲学对比
+## 语言设计取向对比
 
-### C# 的哲学
+### C# 的设计取向
 
-- **生产力优先**：丰富工具、庞大框架、“成功之坑”
+- **生产力优先**：工具完善、框架丰富，默认路径清晰
 - **托管运行时**：垃圾回收自动处理内存
 - **面向企业**：强类型配合反射，标准库丰富
 - **面向对象**：类、继承、接口是主要抽象
 
-### Rust 的哲学
+### Rust 的设计取向
 
 - **不牺牲性能**：零成本抽象，没有运行时开销
 - **内存安全**：编译期保证防止崩溃和安全漏洞

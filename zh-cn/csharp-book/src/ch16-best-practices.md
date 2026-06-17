@@ -311,4 +311,4 @@ fn process(input: Option<String>) -> Option<usize> {
 | `filter` | 只有谓词通过才保留值 | `Where` |
 | `unwrap_or` | 提供默认值 | `?? defaultValue` |
 | `ok()` | 把 `Result` 转成 `Option`（丢弃错误） | — |
-| `transpose` | 把 `Option<Result>` 翻转成 `Result<Option>` | — |# 16. 最佳实践
+| `transpose` | 把 `Option<Result>` 翻转成 `Result<Option>` | — |

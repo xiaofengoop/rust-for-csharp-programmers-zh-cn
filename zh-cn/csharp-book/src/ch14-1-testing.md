@@ -455,6 +455,6 @@ cargo test --test smoke     # 只运行 tests/smoke.rs
 cargo test --test api_tests # 只运行 tests/api_tests.rs
 ```
 
-**与 C# 的关键差异：** 集成测试文件只能访问你的 crate 的 `pub` API。私有函数不可见，这会迫使你通过公开接口测试，通常能带来更好的测试设计。
+**与 C# 的关键差异：** 集成测试文件只能访问你的 crate 的 `pub` API。私有函数不可见，因此你会更多通过公开接口测试，通常能带来更好的测试设计。
 
 ***

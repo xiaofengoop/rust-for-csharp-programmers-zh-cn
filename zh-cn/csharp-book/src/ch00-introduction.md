@@ -70,7 +70,7 @@
 - [面向 C# 开发者的 Rust 价值](ch01-introduction-and-motivation.md#the-case-for-rust-for-c-developers)
 - [Rust 解决的常见 C# 痛点](ch01-introduction-and-motivation.md#common-c-pain-points-that-rust-addresses)
 - [何时选择 Rust 而不是 C#](ch01-introduction-and-motivation.md#when-to-choose-rust-over-c)
-- [语言哲学对比](ch01-introduction-and-motivation.md#language-philosophy-comparison)
+- [语言设计取向对比](ch01-introduction-and-motivation.md#language-philosophy-comparison)
 - [速查：Rust 与 C#](ch01-introduction-and-motivation.md#quick-reference-rust-vs-c)
 
 ### 2. 入门准备 🟢

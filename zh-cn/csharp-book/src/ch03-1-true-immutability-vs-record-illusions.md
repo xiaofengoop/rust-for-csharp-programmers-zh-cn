@@ -38,7 +38,7 @@ var betterPerson = new BetterPerson("Jane", 25, new List<string> { "painting" })
 // 即便是“不可变”集合，也不是真正意义上的语言级不可变
 using System.Collections.Immutable;
 public record SafePerson(string Name, int Age, ImmutableList<string> Hobbies);
-// 这更好，但需要纪律，也有性能开销
+// 这更好，但需要团队约定，也有性能开销
 ```
 
 ### Rust：默认真正不可变
@@ -107,7 +107,7 @@ graph TD
 		CS_REF_MUT["❌ 引用类型仍然可变"]
 		CS_REFLECTION["❌ 反射可以绕过"]
 		CS_RUNTIME["❌ 运行时意外"]
-		CS_DISCIPLINE["😓 需要团队纪律"]
+		CS_DISCIPLINE["😓 需要团队约定"]
         
 		CS_RECORD --> CS_WITH
 		CS_WITH --> CS_SHALLOW
@@ -138,7 +138,7 @@ graph TD
 	style CS_REFLECTION fill:#ffcdd2,color:#000
 	style CS_RUNTIME fill:#ffcdd2,color:#000
 	style RUST_COMPILE fill:#c8e6c9,color:#000
-	style RUST_ZERO fill:#c8e6c9,color:#000
+	style RUST_LOW_COST fill:#c8e6c9,color:#000
 	style RUST_SAFE fill:#c8e6c9,color:#000
 ```
 

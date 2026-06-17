@@ -437,4 +437,4 @@ fn weather_report_display_roundtrip() {
 
 3. **添加 `--format json` 标志**：使用 `serde_json::to_string_pretty` 输出 JSON，而不是人类可读文本。这个练习会训练条件格式化和 `Serialize`。
 
-4. **编写集成测试**：创建 `tests/integration.rs`，用 `wiremock` 模拟 HTTP 服务器，测试完整流程。这个练习会用到 ch14-1 中介绍的 `tests/` 目录模式。# 17. 综合项目：构建 CLI 天气工具
+4. **编写集成测试**：创建 `tests/integration.rs`，用 `wiremock` 模拟 HTTP 服务器，测试完整流程。这个练习会用到 ch14-1 中介绍的 `tests/` 目录模式。
