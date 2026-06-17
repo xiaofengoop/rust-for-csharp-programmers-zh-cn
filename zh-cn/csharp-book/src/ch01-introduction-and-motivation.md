@@ -97,7 +97,7 @@ public class RuntimeCheckedOperations
 ```
 
 ```rust
-// Rust - 编译期安全，零运行时成本
+// Rust - 编译期表达空值和共享约束，常见检查可被优化
 struct SafeOperations;
 
 impl SafeOperations {
@@ -348,7 +348,7 @@ fn get_high_value_orders(orders: &[Order]) -> Vec<OrderSummary> {
 		})
 		.sorted_by(|a, b| b.total.cmp(&a.total)) // itertools
 		.collect()
-	// 管道中完全没有 null
+	// 管道中没有隐式 null；需要表达缺失值时使用 Option
 	// 闭包会被单态化：与手写循环相比没有额外开销
 	// 纯度得到约束：&[Order] 表示函数不能修改 orders
 }
@@ -415,8 +415,8 @@ impl Greeter for RobotDog {} // 清晰、显式的行为
 // 给 Speaker 添加方法？编译器会告诉你每个需要实现的位置。
 ```
 
-> **关键洞察**：在 C# 中，正确性是一种纪律：你希望开发者遵守约定、编写测试，并在代码审查中发现边界情况。  
-> 在 Rust 中，正确性是**类型系统的属性**：空引用、遗忘变体、意外修改、数据竞争等整类 bug 在结构上就不可能出现。
+> **关键洞察**：在 C# 中，很多正确性依赖团队纪律：你希望开发者遵守约定、编写测试，并在代码审查中发现边界情况。<br>
+> 在 Rust 中，一部分正确性可以前移到**类型系统**：空值、遗忘变体、意外修改、数据竞争等问题能在安全代码中被结构化地排除。业务规则、死锁、资源耗尽和错误建模仍然需要工程设计。
 
 ***
 

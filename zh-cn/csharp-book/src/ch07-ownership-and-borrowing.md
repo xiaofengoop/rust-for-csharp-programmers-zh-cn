@@ -435,7 +435,7 @@ graph TD
 		RUST_BORROW --> RUST_SCOPE
 		RUST_SCOPE --> RUST_COMPILE
         
-		RUST_BENEFITS["[正常] 确定性清理<br/>[正常] 零运行时成本<br/>[正常] 无内存泄漏<br/>[错误] 学习曲线"]
+		RUST_BENEFITS["[正常] 确定性清理<br/>[正常] 常见检查前移到编译期<br/>[正常] 避免悬垂引用<br/>[注意] Rc 循环等仍需处理<br/>[错误] 学习曲线"]
 	end
     
 	style CS_ISSUES fill:#ffebee,color:#000

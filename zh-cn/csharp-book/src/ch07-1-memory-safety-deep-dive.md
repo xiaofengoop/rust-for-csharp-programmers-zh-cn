@@ -148,16 +148,16 @@ impl Buffer {
 		// self.data[index] = 42;  // debug 中 panic，但仍然内存安全
 	}
     
-	// 所有权系统阻止内存泄漏
+	// 所有权系统防止悬垂引用，并让清理路径明确
 	fn process_with_closure<F>(&mut self, processor: F) 
 	where F: FnOnce(&mut Vec<u8>)
 	{
 		processor(&mut self.data);
 		// processor 离开作用域时会被自动清理
-		// 无法创建悬垂引用或内存泄漏
+		// 无法创建悬垂引用；泄漏模式仍需通过设计避免
 	}
     
-	// 不可能解引用空指针，因为没有 null 指针！
+	// 安全引用不能为 null，因此这里不会出现空引用解引用
 	fn process_user(&self, user: &User) {
 		println!("{}", user.name.to_uppercase());  // user.name 不可能为 null
 	}
@@ -219,10 +219,10 @@ graph TD
 		RUST_TYPES["类型系统"]
 		RUST_ZERO_COST["零成本抽象"]
 		RUST_NO_NULL["无 null 指针"]
-		RUST_NO_LEAKS["无内存泄漏"]
-		RUST_FAST["最佳性能"]
+		RUST_NO_DANGLING["避免悬垂引用"]
+		RUST_FAST["可预测性能"]
         
-		RUST_OWNERSHIP --> RUST_NO_LEAKS
+		RUST_OWNERSHIP --> RUST_NO_DANGLING
 		RUST_BORROWING --> RUST_NO_NULL
 		RUST_TYPES --> RUST_ZERO_COST
 		RUST_ZERO_COST --> RUST_FAST
@@ -232,7 +232,7 @@ graph TD
 	style CS_LEAKS fill:#ffcdd2,color:#000
 	style CS_OVERHEAD fill:#fff3e0,color:#000
 	style RUST_NO_NULL fill:#c8e6c9,color:#000
-	style RUST_NO_LEAKS fill:#c8e6c9,color:#000
+	style RUST_NO_DANGLING fill:#c8e6c9,color:#000
 	style RUST_FAST fill:#c8e6c9,color:#000
 ```
 

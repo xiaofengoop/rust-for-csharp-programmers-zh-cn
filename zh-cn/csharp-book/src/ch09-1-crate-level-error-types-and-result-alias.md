@@ -152,7 +152,9 @@ fn main() -> Result<()> {
 //   throw new InvalidOperationException("Failed to read config", ex);
 ```
 
-**准则：** 如果你的代码是**库**（其他代码会调用它），使用 `thiserror`。如果你的代码是**应用**（最终 binary），使用 `anyhow`。许多项目会两者都用：在 library crate 的公开 API 中用 `thiserror`，在 `main()` binary 中用 `anyhow`。
+**准则：** 如果你的代码是**库**（其他代码会调用它），优先使用 `thiserror` 暴露结构化错误。如果你的代码是**应用**（最终 binary），通常可以使用 `anyhow` 快速传播并补充上下文。许多项目会两者都用：在 library crate 的公开 API 中用 `thiserror`，在 `main()` binary 中用 `anyhow`。
+
+这不是硬性规则。库内部可以用 `anyhow` 简化实现，但不宜把不透明错误直接暴露给需要精确处理错误的调用方；应用也可以在领域边界定义自己的错误类型，避免所有错误都变成一团字符串。关键是让调用方看到它需要做决策的信息，并在跨模块边界时补足上下文。
 
 <a id="error-recovery-patterns"></a>
 

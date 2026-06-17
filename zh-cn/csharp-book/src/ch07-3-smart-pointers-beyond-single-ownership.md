@@ -33,7 +33,7 @@ let list = List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))));
 ```csharp
 // C# — 引用类型本来就在堆上
 // Rust 需要 Box<T>，是因为栈分配才是默认
-var list = new LinkedListNode<int>(1);  // 总是分配在堆上
+var list = new LinkedListNode<int>(1);  // 作为引用类型，通常由运行时在托管堆上管理
 ```
 
 ### Rc&lt;T&gt;：共享所有权（单线程）

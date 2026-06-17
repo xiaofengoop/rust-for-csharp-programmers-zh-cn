@@ -123,15 +123,15 @@ graph TD
 		RUST_COMPILE["✅ 编译期强制"]
 		RUST_MUT["🔒 必须显式使用 'mut'"]
 		RUST_MOVE["🔄 移动语义"]
-		RUST_ZERO["⚡ 零运行时开销"]
+		RUST_LOW_COST["⚡ 无额外运行时检查"]
 		RUST_SAFE["🛡️ 内存安全"]
         
 		RUST_STRUCT --> RUST_DEFAULT
 		RUST_DEFAULT --> RUST_COMPILE
 		RUST_COMPILE --> RUST_MUT
 		RUST_MUT --> RUST_MOVE
-		RUST_MOVE --> RUST_ZERO
-		RUST_ZERO --> RUST_SAFE
+		RUST_MOVE --> RUST_LOW_COST
+		RUST_LOW_COST --> RUST_SAFE
 	end
     
 	style CS_REF_MUT fill:#ffcdd2,color:#000

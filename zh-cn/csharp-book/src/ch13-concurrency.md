@@ -251,8 +251,8 @@ graph TD
         RUST_SYNC["Sync trait"]
         RUST_ARC["Arc<Mutex<T>>"]
         RUST_CHANNELS["消息传递"]
-        RUST_SAFE["数据竞争不可能发生"]
-        RUST_FAST["零成本抽象"]
+        RUST_SAFE["安全代码防止数据竞争"]
+        RUST_SYNC_COST["显式同步成本"]
         
         RUST_OWNERSHIP --> RUST_BORROWING
         RUST_BORROWING --> RUST_SEND
@@ -260,14 +260,14 @@ graph TD
         RUST_SYNC --> RUST_ARC
         RUST_ARC --> RUST_CHANNELS
         RUST_CHANNELS --> RUST_SAFE
-        RUST_SAFE --> RUST_FAST
+        RUST_SAFE --> RUST_SYNC_COST
     end
     
     style CS_FORGET fill:#ffcdd2,color:#000
     style CS_DEADLOCK fill:#ffcdd2,color:#000
     style CS_RACE fill:#ffcdd2,color:#000
     style RUST_SAFE fill:#c8e6c9,color:#000
-    style RUST_FAST fill:#c8e6c9,color:#000
+    style RUST_SYNC_COST fill:#e8f5e8,color:#000
 ```
 
 ***
@@ -328,14 +328,14 @@ fn main() {
 }
 ```
 
-**关键要点：** `Arc<Mutex<T>>` 是通用模式。对于简单计数器，`AtomicU64` 可以完全避免锁开销。
+**关键要点：** `Arc<Mutex<T>>` 是共享可变状态的常见模式，但不应当成为默认答案。对于简单计数器，`AtomicU64` 可以避免锁；对于生产服务，还应考虑消息传递、分片锁、无共享设计，以及锁持有时间对吞吐和延迟的影响。
 
 </details>
 </details>
 
 ### Rust 为什么能防止数据竞争：Send 与 Sync
 
-Rust 使用两个 marker trait 在**编译期**强制线程安全，C# 没有直接对应物：
+Rust 使用两个 marker trait 在**编译期**强制线程安全，C# 没有直接对应物。这能防止安全代码中的数据竞争，但不等于自动消除死锁、活锁、饥饿或业务层面的竞态：
 
 - `Send`：一个类型可以安全地**转移**到另一个线程，例如移动进传给 `thread::spawn` 的闭包。
 - `Sync`：一个类型可以通过 `&T` 在线程之间安全地**共享**。

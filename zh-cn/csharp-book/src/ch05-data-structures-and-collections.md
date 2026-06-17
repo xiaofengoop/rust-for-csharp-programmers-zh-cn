@@ -299,7 +299,7 @@ fn print_string(s: &str) {
 
 ### 现代 C#：`Span<T>` 与 Inline Arrays
 
-C# 已经不只有传统数组了。`Span<T>` 提供类型安全的连续内存视图，可以存在于栈上；Inline Arrays（C# 12）则提供固定大小的栈上缓冲区。
+C# 已经不只有传统数组了。`Span<T>` 提供类型安全的连续内存视图，可以引用栈上或托管内存中的数据；Inline Arrays（C# 12）则提供固定大小的内联缓冲区，当值本身位于栈上时可以避免额外堆分配。
 
 ```csharp
 // C# Span<T> - 连续内存视图
@@ -315,7 +315,7 @@ void ProcessSpan(ReadOnlySpan<int> data)
 		Console.WriteLine(data[i]);
 }
 
-// Inline Arrays（C# 12）- 固定大小栈上缓冲区
+// Inline Arrays（C# 12）- 固定大小内联缓冲区
 [InlineArray(5)]
 struct IntBuffer
 {
@@ -345,13 +345,13 @@ let buffer: [i32; 5] = [0; 5];
 
 | C# | Rust |
 |----|------|
-| `Span<T>`（ref struct，仅栈上） | `&mut [T]` / `&[T]`（借用切片） |
+| `Span<T>`（ref struct，不能装箱或存入普通堆对象字段） | `&mut [T]` / `&[T]`（借用切片） |
 | `ReadOnlySpan<T>` | `&[T]`（不可变切片） |
 | `ReadOnlySpan<char>` / `string.AsSpan()` | `&str`（字符串切片） |
 | `[InlineArray(N)]` struct（C# 12） | `[T; N]`（固定大小数组） |
 | 搭配 `Span<T>` 的 `stackalloc T[]` | `let arr: [T; N] = ...`（局部数组） |
 
-> **关键洞察：** Rust 的 `&[T]` 结合了 C# 中 `ArraySegment<T>`、`Span<T>` 和 `ReadOnlySpan<T>` 的角色。它是一个胖指针（指针 + 长度），可用于数组、vector 和子切片。C# 的 Inline Arrays 可以自然映射到 Rust 的 `[T; N]` 数组，后者默认也分配在栈上。
+> **关键洞察：** Rust 的 `&[T]` 结合了 C# 中 `ArraySegment<T>`、`Span<T>` 和 `ReadOnlySpan<T>` 的角色。它是一个胖指针（指针 + 长度），可用于数组、vector 和子切片。C# 的 Inline Arrays 与 Rust 的 `[T; N]` 都表达固定大小的内联存储；Rust 局部数组通常位于当前栈帧，放入堆分配结构时则随宿主值一起存放。
 
 ***
 
@@ -378,7 +378,7 @@ graph TD
 	style RFields fill:#c8e6c9,color:#000
 ```
 
-> **关键洞察**：C# 类总是通过引用存在于堆上。Rust 结构体默认在栈上，只有动态大小的数据（例如 `String` 内容）进入堆。这会消除小型、频繁创建对象的 GC 开销。
+> **关键洞察**：C# class 的常见实例模型是通过引用访问托管对象；对象通常位于托管堆上，并由 GC 管理。Rust 结构体默认按值保存，局部值通常直接位于当前栈帧中，只有动态大小的数据（例如 `String` 和 `Vec` 的缓冲区）进入堆。这能减少小型、频繁创建对象的分配和 GC 压力，但具体布局与优化仍取决于编译器和运行时。
 
 ### C# 类定义
 

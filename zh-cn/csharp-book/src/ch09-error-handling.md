@@ -150,7 +150,7 @@ graph TD
         RUST_ERR["Err(error)"]
         RUST_MATCH["match result"]
         RUST_QUESTION["? 运算符<br/>（提前返回）"]
-        RUST_EXPLICIT["[OK] 显式错误处理<br/>[OK] 零运行时开销<br/>[OK] 错误不能被忽略"]
+        RUST_EXPLICIT["[OK] 显式错误处理<br/>[OK] 普通控制流<br/>[提示] 未使用 Result 会告警"]
         
         RUST_CALL --> RUST_OK
         RUST_CALL --> RUST_ERR
@@ -166,6 +166,8 @@ graph TD
     style CS_STACK fill:#fff3e0,color:#000
     style RUST_QUESTION fill:#c8e6c9,color:#000
 ```
+
+这里的“显式”并不意味着错误处理会自动正确。`Result` 默认带有 `must_use` 提示，未使用时会产生警告；但如何建模错误、添加上下文、恢复或传播，仍然是需要设计的工程决策。
 
 ***
 
