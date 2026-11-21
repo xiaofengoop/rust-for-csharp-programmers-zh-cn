@@ -116,7 +116,7 @@ graph LR
     end
     MI -->|"C ABI 调用"| FFI["FFI 边界"]
     subgraph "Rust cdylib（.so / .dll）"
-        FFI --> RF["extern \"C\" fn<br/>#[no_mangle]"]
+        FFI --> RF["extern #quot;C#quot; fn<br/>#[no_mangle]"]
         RF --> Safe["Safe Rust<br/>内部实现"]
     end
 
